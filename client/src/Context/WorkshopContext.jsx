@@ -46,7 +46,7 @@ export function WorkshopProvider({ children }) {
     setDraggedPart(null);
   }
 
-// Change this function in WorkShopContext.jsx
+// Change this function in WorkshopContext.jsx
   function finishInstall(id) {
     if (id) {
       playInstallSound(id); 
