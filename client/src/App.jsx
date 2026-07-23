@@ -2,7 +2,7 @@ import ToastContainer from "./components/ToastContainer";
 import { useEffect } from "react";
 
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { WorkshopProvider } from "./Context/WorkShopContext";
+import { WorkshopProvider } from "./Context/WorkshopContext";
 import { MechapediaThemeProvider } from "./Context/MechapediaThemeContext";
 import { AssemblyValidationProvider } from "./Context/AssemblyValidationContext";
 
