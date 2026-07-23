@@ -1,0 +1,38 @@
+.settingsOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.settingsContent {
+  background: rgba(15, 15, 15, 0.95);
+  padding: 40px;
+  border-radius: 20px;
+  border: 1px solid #0047AB;
+  width: 400px;
+  color: white;
+  font-family: 'Rajdhani', sans-serif;
+}
+
+.settingItem {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.close-btn {
+  width: 100%;
+  padding: 10px;
+  background: #0047AB;
+  border: none;
+  color: white;
+  font-weight: 700;
+  cursor: pointer;
+}

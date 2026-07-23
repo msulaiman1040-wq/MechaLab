@@ -1,0 +1,96 @@
+.quantityBadge {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #E53935;
+  color: white;
+  font-size: 12px;
+  font-weight: bold;
+  font-family: monospace; /* Data-driven aesthetic */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 2px solid #0B0B0B; /* Separation from circle */
+  box-shadow: 0 0 10px rgba(229, 57, 53, 0.8);
+  z-index: 20;
+  pointer-events: none;
+}
+
+.partTray {
+  position: fixed;
+  left: 0;
+  bottom: 25px;
+  width: 100%;
+  height: 110px;
+  display: flex;
+  align-items: center;
+  pointer-events: auto;
+}
+
+.carouselWindow {
+  width: 100%;
+  height: 130px;
+  overflow-x: auto;
+  overflow-y: visible;
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+  background: transparent;
+  border: none;
+  scrollbar-width: none;
+  /* Adds a gentle fade to the edges of the tray */
+  mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
+}
+
+.carouselWindow::-webkit-scrollbar {
+  display: none;
+}
+
+.carousel {
+  display: flex;
+  align-items: center;
+  gap: 26px;
+  padding: 0 20px;
+  width: max-content;
+  height: 100%;
+  background: transparent;
+}
+
+.partCircle {
+  position: relative;
+  width: 88px;
+  height: 88px;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  /* Glassmorphism effect */
+  background: rgba(28, 28, 28, 0.7);
+  backdrop-filter: blur(10px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: inset 0 0 15px rgba(255, 255, 255, 0.05), 0 8px 25px rgba(0, 0, 0, 0.45);
+  transition: .3s;
+  -webkit-user-drag: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+  touch-action: manipulation; /* Optimizes tap response times for touch & emulators */
+}
+.partCircle:hover {
+  transform: translateY(-10px) scale(1.12);
+  border-color: #0047AB;
+  /* Power-up glow effect */
+  box-shadow: 0 0 20px rgba(0, 71, 171, 0.6), inset 0 0 10px rgba(0, 71, 171, 0.2);
+}
+
+.partCircle img {
+  width: 70%;
+  height: 70%;
+  object-fit: contain;
+  pointer-events: none;
+  -webkit-user-drag: none;
+  user-select: none;
+}

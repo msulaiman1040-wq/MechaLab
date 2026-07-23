@@ -1,0 +1,385 @@
+/* Smooth transition across all themes */
+.mechapedia, .partPage, .partCard, .mechapediaIntro, .articleSection, .partImageContainer, .pageImageContainer {
+    transition: background 0.4s ease, color 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease !important;
+}
+::-webkit-scrollbar {
+    width: 8px;
+}
+::-webkit-scrollbar-track {
+    background: #020408;
+}
+::-webkit-scrollbar-thumb {
+    background: #0047AB;
+    border-radius: 4px;
+    box-shadow: 0 0 10px rgba(0, 71, 171, 0.8);
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #0056cc;
+}
+
+.mechapedia, .partPage {
+    padding: clamp(30px, 6vh, 60px) clamp(4%, 6vw, 8%);
+    background: radial-gradient(circle at 50% 10%, #030712 0%, #000000 80%);
+    color: #ffffff;
+    min-height: 100vh;
+    font-family: 'Segoe UI', Roboto, Helvetica, sans-serif;
+    position: relative;
+    overflow-x: hidden;
+    box-sizing: border-box;
+}
+
+/* Crisp Sci-fi Animated Grid Background */
+.mechapedia::before, .partPage::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background-image: 
+        linear-gradient(rgba(0, 71, 171, 0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 71, 171, 0.04) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.mechapedia > *, .partPage > * {
+    position: relative;
+    z-index: 2;
+}
+
+/* Glowing Holographic Titles (Fluid Responsive) */
+.mechapediaTitle, .pageHeader h1 {
+    color: #ffffff;
+    text-align: center;
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 900;
+    letter-spacing: clamp(1px, 0.5vw, 3px);
+    text-transform: uppercase;
+    text-shadow: 0 0 30px rgba(0, 71, 171, 0.8), 0 0 10px rgba(0, 71, 171, 0.5);
+    margin-bottom: 8px;
+    word-break: break-word;
+}
+
+.mechapediaSubtitle, .pageHeader p {
+    text-align: center;
+    color: #3b82f6;
+    font-size: clamp(0.95rem, 2vw, 1.15rem);
+    font-weight: 600;
+    letter-spacing: clamp(1px, 0.3vw, 2px);
+    text-transform: uppercase;
+    margin-bottom: clamp(20px, 4vh, 35px);
+    text-shadow: 0 0 15px rgba(59, 130, 246, 0.4);
+}
+
+/* Frosted Glassmorphism Intro Box */
+.mechapediaIntro {
+    max-width: 850px;
+    margin: 0 auto clamp(30px, 5vh, 50px) auto;
+    line-height: 1.8;
+    color: #cbd5e1;
+    text-align: center;
+    background: rgba(3, 7, 18, 0.65);
+    border: 1px solid rgba(0, 71, 171, 0.35);
+    padding: clamp(18px, 3vw, 30px);
+    border-radius: 16px;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    box-sizing: border-box;
+    font-size: clamp(0.95rem, 1.5vw, 1.05rem);
+}
+
+.mechapediaIntro strong {
+    color: #60a5fa;
+}
+
+/* Grid Layout */
+.partsGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: clamp(20px, 3vw, 30px);
+    margin-bottom: clamp(40px, 6vh, 60px);
+}
+
+/* Crispy Glassmorphism Interactive Cards */
+.partCard {
+    background: linear-gradient(135deg, rgba(8, 12, 24, 0.8) 0%, rgba(2, 4, 10, 0.9) 100%);
+    border: 1px solid rgba(0, 71, 171, 0.25);
+    border-radius: 16px;
+    padding: clamp(20px, 3vw, 28px);
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    position: relative;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+/* Glowing Border Sweep Effect on Hover */
+.partCard::before {
+    content: '';
+    position: absolute;
+    top: 0; left: -100%;
+    width: 100%; height: 2px;
+    background: linear-gradient(90deg, transparent, #0047AB, #60a5fa, transparent);
+    transition: 0.5s ease;
+}
+
+.partCard:hover::before {
+    left: 100%;
+}
+
+/* Sci-fi corner badge */
+.partCard::after {
+    content: "";
+    position: absolute;
+    top: 0; right: 0;
+    border-width: 0 28px 28px 0;
+    border-style: solid;
+    border-color: rgba(0, 71, 171, 0.3) transparent;
+    transition: all 0.3s ease;
+}
+
+.partCard:hover {
+    border-color: #0047AB;
+    box-shadow: 0 0 35px rgba(0, 71, 171, 0.35), 0 20px 40px rgba(0, 0, 0, 0.8);
+    transform: translateY(-8px) scale(1.01);
+}
+
+.partCard:hover::after {
+    border-color: #60a5fa transparent;
+}
+
+.partCard h2 {
+    font-size: clamp(1.2rem, 2vw, 1.4rem);
+    margin-bottom: 12px;
+    color: #ffffff;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+
+.partCard p {
+    font-size: clamp(0.88rem, 1.5vw, 0.92rem);
+    color: #94a3b8;
+    line-height: 1.6;
+}
+
+/* Image Containers with Inner Glow */
+.partImageContainer, .pageImageContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: radial-gradient(circle, rgba(0, 71, 171, 0.1) 0%, rgba(0, 0, 0, 0.7) 100%);
+    border: 1px solid rgba(0, 71, 171, 0.2);
+    border-radius: 12px;
+    padding: clamp(15px, 3vw, 30px);
+    margin-bottom: 22px;
+    position: relative;
+    box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.8);
+    box-sizing: border-box;
+}
+
+.partImage {
+    max-width: 100%;
+    height: clamp(120px, 20vh, 160px);
+    object-fit: contain;
+    filter: drop-shadow(0 12px 20px rgba(0, 0, 0, 0.9));
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.partCard:hover .partImage {
+    transform: scale(1.12) rotate(2deg);
+}
+
+.mainPartImage {
+    max-width: 100%;
+    width: clamp(250px, 50vw, 420px);
+    height: auto;
+    object-fit: contain;
+    filter: drop-shadow(0 20px 30px rgba(0, 71, 171, 0.4));
+    animation: floatImage 4s ease-in-out infinite;
+}
+
+@keyframes floatImage {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-8px); }
+}
+
+/* Crispy Dossier Article Sections */
+.articleSection {
+    background: linear-gradient(135deg, rgba(8, 12, 22, 0.7) 0%, rgba(2, 5, 12, 0.85) 100%);
+    border-left: 5px solid #0047AB;
+    border-top: 1px solid rgba(0, 71, 171, 0.25);
+    border-right: 1px solid rgba(0, 71, 171, 0.25);
+    border-bottom: 1px solid rgba(0, 71, 171, 0.25);
+    padding: clamp(20px, 3.5vw, 35px);
+    border-radius: 0 14px 14px 0;
+    margin-bottom: 35px;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+    transition: border-color 0.3s ease;
+    box-sizing: border-box;
+}
+
+.articleSection:hover {
+    border-left-color: #60a5fa;
+    border-color: rgba(0, 71, 171, 0.5);
+}
+
+.articleSection h2 {
+    color: #60a5fa !important;
+    border-bottom: 1px solid rgba(0, 71, 171, 0.3) !important;
+    padding-bottom: 12px !important;
+    margin-bottom: 18px !important;
+    font-size: clamp(1.2rem, 2.2vw, 1.5rem);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+}
+
+.articleSection p {
+    line-height: 1.8 !important;
+    color: #e2e8f0 !important;
+    font-size: clamp(0.95rem, 1.6vw, 1.1rem);
+}
+
+/* High-Tech Glow Action Buttons */
+.pageButtons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: clamp(12px, 2vw, 20px);
+    margin-top: clamp(30px, 5vh, 60px);
+}
+
+.backButton, .backWorkshop {
+    background: linear-gradient(135deg, #0047AB 0%, #002b66 100%);
+    color: #ffffff;
+    border: 1px solid rgba(96, 165, 250, 0.4);
+    padding: clamp(12px, 2vh, 16px) clamp(20px, 4vw, 32px);
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: clamp(0.85rem, 1.5vw, 1rem);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 6px 20px rgba(0, 71, 171, 0.5);
+    flex: 1;
+    min-width: 140px;
+    text-align: center;
+}
+
+.backButton:hover, .backWorkshop:hover {
+    background: linear-gradient(135deg, #0056cc 0%, #003380 100%);
+    border-color: #60a5fa;
+    box-shadow: 0 0 30px rgba(0, 71, 171, 0.9), 0 0 10px rgba(96, 165, 250, 0.8);
+    transform: translateY(-3px);
+}
+
+/* ==========================================
+    THEME SWITCHER STYLES
+    ========================================== */
+
+.themeToggleContainer {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 20px;
+}
+
+.themeToggleBtn {
+    background: rgba(0, 71, 171, 0.2);
+    color: #ffffff;
+    border: 1px solid #0047AB;
+    padding: clamp(6px, 1vh, 8px) clamp(12px, 2vw, 16px);
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: clamp(0.85rem, 1.2vw, 0.95rem);
+    transition: all 0.3s ease;
+    backdrop-filter: blur(5px);
+}
+
+.themeToggleBtn:hover {
+    background: #0047AB;
+    box-shadow: 0 0 15px rgba(0, 71, 171, 0.8);
+}
+
+/* --- LIGHT MODE VARIABLES & OVERRIDES --- */
+.mechapedia.light-mode, .partPage.light-mode {
+    background: radial-gradient(circle at 50% 10%, #f0f4f8 0%, #e2e8f0 80%);
+    color: #0f172a;
+}
+
+.mechapedia.light-mode::before, .partPage.light-mode::before {
+    background-image: 
+        linear-gradient(rgba(0, 71, 171, 0.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 71, 171, 0.06) 1px, transparent 1px);
+}
+
+.light-mode .mechapediaTitle, 
+.light-mode .pageHeader h1 {
+    color: #0f172a;
+    text-shadow: 0 0 15px rgba(0, 71, 171, 0.2);
+}
+
+.light-mode .mechapediaSubtitle, 
+.light-mode .pageHeader p {
+    color: #0047AB;
+    text-shadow: none;
+}
+
+.light-mode .mechapediaIntro {
+    background: rgba(255, 255, 255, 0.85);
+    border: 1px solid rgba(0, 71, 171, 0.2);
+    color: #334155;
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.08);
+}
+
+.light-mode .partCard {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(241, 245, 249, 0.95) 100%);
+    border: 1px solid rgba(0, 71, 171, 0.2);
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08);
+}
+
+.light-mode .partCard h2 {
+    color: #0f172a;
+}
+
+.light-mode .partCard p {
+    color: #475569;
+}
+
+.light-mode .partImageContainer, 
+.light-mode .pageImageContainer {
+    background: radial-gradient(circle, rgba(0, 71, 171, 0.05) 0%, rgba(255, 255, 255, 0.9) 100%);
+    border: 1px solid rgba(0, 71, 171, 0.15);
+    box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.03);
+}
+
+.light-mode .articleSection {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.85) 0%, rgba(241, 245, 249, 0.9) 100%);
+    border-left: 5px solid #0047AB;
+    border-color: rgba(0, 71, 171, 0.2);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+}
+
+.light-mode .articleSection h2 {
+    color: #0047AB !important;
+}
+
+.light-mode .articleSection p {
+    color: #334155 !important;
+}
+
+.light-mode .themeToggleBtn {
+    background: #ffffff;
+    color: #0047AB;
+    border-color: #0047AB;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+}
+
+.light-mode .themeToggleBtn:hover {
+    background: #0047AB;
+    color: #ffffff;
+}

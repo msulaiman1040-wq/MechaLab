@@ -1,0 +1,233 @@
+@import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700&display=swap');
+
+.simulationBar {
+    position: fixed;
+    top: 95px;
+    right: 25px;
+    left: auto;
+    transform: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 12px 22px;
+    border: 2px solid #0047AB;
+    border-radius: 60px;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 0 14px rgba(0,191,255,.35);
+    z-index: 3000;
+    font-family: 'Rajdhani', sans-serif;
+}
+
+.simulationControls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.controlItem {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-width: 75px;
+}
+
+/* =======================
+     IGNITION
+======================= */
+
+.ignitionButton {
+    width: 75px;
+    height: 75px;
+    border-radius: 50%;
+    border: 3px solid silver;
+    background: radial-gradient(circle,#252525,#050505);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    cursor: pointer;
+    transition: .25s;
+}
+
+.engineText {
+    font-size: 10px;
+    letter-spacing: 1px;
+    font-weight: bold;
+}
+
+.startStopText {
+    font-size: 8px;
+    margin-top: 1px;
+    opacity: .9;
+}
+
+.powerIcon {
+    font-size: 18px;
+    margin-top: 2px;
+    color: #7ecfff;
+}
+
+/* =======================
+     PEDALS
+======================= */
+
+.pedalLabel {
+    color: #ffffff;
+    font-size: 10px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    margin-bottom: 6px;
+}
+
+.acceleratorPedal {
+    width: 26px;
+    height: 46px;
+    border-radius: 10px;
+    background: linear-gradient(#777,#222);
+    border: 2px solid #999;
+    cursor: pointer;
+    box-shadow: inset 0 0 8px rgba(255,255,255,.2);
+}
+
+.brakePedal {
+    width: 46px;
+    height: 34px;
+    border-radius: 8px;
+    background: linear-gradient(#777,#222);
+    border: 2px solid #999;
+    cursor: pointer;
+    box-shadow: inset 0 0 8px rgba(255,255,255,.2);
+}
+
+.engineOn {
+    border-color: #00bfff !important;
+    box-shadow: 
+        0 0 15px #00bfff,
+        0 0 30px rgba(0,191,255,.55),
+        inset 0 0 18px rgba(0,191,255,.35);
+}
+
+/* ==========================
+     SHIFTER
+========================== */
+
+.shifterTitle {
+    color: white;
+    font-size: 10px;
+    letter-spacing: 1px;
+    margin-bottom: 6px;
+    font-weight: bold;
+}
+
+.gearBox {
+    width: 50px;
+    border: 2px solid silver;
+    border-radius: 12px;
+    overflow: hidden;
+    background: #111;
+    box-shadow: 0 0 10px rgba(0,71,171,.35);
+}
+
+.gearSlot {
+    height: 32px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 16px;
+    font-weight: bold;
+    color: #bbb;
+    border-bottom: 1px solid #333;
+    cursor: pointer;
+    transition: .25s;
+    user-select: none;
+}
+
+.gearSlot:last-child {
+    border-bottom: none;
+}
+
+.gearSlot:hover {
+    background: #1d1d1d;
+}
+
+.gearActive {
+    color: white;
+    background: #0047AB;
+    box-shadow: 
+        inset 0 0 12px rgba(255,255,255,.2),
+        0 0 15px #0047AB;
+}
+
+/* ==========================================================
+   MOBILE BREAKPOINT (< 768px) - BELOW HEADER & TRANSPARENT
+========================================================== */
+@media (max-width: 768px) {
+    .simulationBar {
+        position: fixed;
+        top: 130px; /* Safely pushed down below the stacked mobile header */
+        right: 12px;
+        left: auto;
+        bottom: auto;
+        background: transparent; /* Fully transparent background as requested */
+        border: none;
+        box-shadow: none;
+        backdrop-filter: none;
+        padding: 0;
+        border-radius: 0;
+    }
+
+    .simulationControls {
+        flex-direction: column; /* Stack vertically down the right side */
+        gap: 8px;
+        background: transparent; /* Ensures transparent container styling */
+        border: none;
+        padding: 0;
+        box-shadow: none;
+        backdrop-filter: none;
+    }
+
+    .controlItem {
+        min-width: unset;
+    }
+
+    /* Compact Individual Elements */
+    .ignitionButton {
+        width: 42px;
+        height: 42px;
+        border-width: 2px;
+        background: rgba(0, 0, 0, 0.7);
+    }
+    .engineText, .startStopText {
+        display: none; /* Hide labels to save space */
+    }
+    .powerIcon {
+        font-size: 14px;
+        margin: 0;
+    }
+
+    .pedalLabel, .shifterTitle {
+        display: none; /* Hide individual titles */
+    }
+
+    .acceleratorPedal {
+        width: 18px;
+        height: 30px;
+    }
+    .brakePedal {
+        width: 30px;
+        height: 20px;
+    }
+
+    .gearBox {
+        width: 30px;
+        background: rgba(0, 0, 0, 0.8);
+    }
+    .gearSlot {
+        height: 20px;
+        font-size: 10px;
+    }
+}

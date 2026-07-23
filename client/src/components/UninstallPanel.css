@@ -1,0 +1,90 @@
+@import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700&display=swap');
+
+.uninstall-container {
+  position: absolute;
+  top: 130px; /* Pushed down to clear the taller mobile header */
+  left: 15px;
+  z-index: 1000;
+  font-family: 'Rajdhani', sans-serif;
+  display: flex;
+  flex-direction: column;
+}
+
+.uninstall-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.manage-btn {
+  background: #000000;
+  color: white;
+  padding: clamp(8px, 1.5vh, 12px) clamp(16px, 3vw, 24px);
+  border: 2px solid #0047AB;
+  border-radius: 30px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: clamp(12px, 3.2vw, 14px);
+  box-shadow: 0 4px 15px rgba(0, 71, 171, 0.3);
+  font-family: 'Rajdhani', sans-serif;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.parts-list {
+  margin-top: 10px;
+  background: rgba(0, 0, 0, 0.85);
+  padding: 10px;
+  border-radius: 12px;
+  border: 1px solid #0047AB;
+  backdrop-filter: blur(5px);
+  width: clamp(200px, 60vw, 240px);
+  max-height: 200px;
+  overflow-y: auto;
+  box-sizing: border-box;
+}
+
+.parts-list::-webkit-scrollbar {
+  width: 6px;
+}
+.parts-list::-webkit-scrollbar-thumb {
+  background: #0047AB;
+  border-radius: 10px;
+}
+.parts-list::-webkit-scrollbar-track {
+  background: #000;
+}
+
+.empty-state {
+  color: white;
+  text-align: center;
+  font-size: clamp(12px, 3.2vw, 14px);
+  margin: 0;
+  padding: 10px 0;
+}
+
+.remove-btn {
+  display: block;
+  width: 100%;
+  padding: clamp(6px, 1.5vh, 8px) clamp(8px, 2vw, 12px);
+  margin-bottom: 8px;
+  background: transparent;
+  color: #ffffff;
+  border: 1px solid #333;
+  border-radius: 8px;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.2s;
+  font-family: 'Rajdhani', sans-serif;
+  font-size: clamp(12px, 3.2vw, 14px);
+  box-sizing: border-box;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.remove-btn:hover {
+  background-color: #0047AB;
+  color: #ffffff;
+  border-color: #0047AB;
+}

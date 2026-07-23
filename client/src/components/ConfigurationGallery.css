@@ -1,0 +1,72 @@
+.configList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 20px;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.configCard {
+  display: flex;
+  align-items: center;
+  padding: 1px 15px; /* Added proper padding */
+  border: 1px solid rgba(0, 71, 171, 0.3);
+  background: rgba(255, 255, 255, 0.03);
+  transition: all 0.3s ease;
+}
+
+.configCard:hover {
+  background: rgba(0, 71, 171, 0.1);
+  border-color: var(--primary-blue);
+}
+
+.config-item-name {
+  cursor: pointer;
+  color: var(--text-white);
+  font-family: var(--font-main);
+  text-transform: uppercase;
+  flex-grow: 1; /* Allows text to take available space */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.config-item-name:hover {
+  color: var(--primary-blue);
+}
+
+.delete-btn {
+  background: transparent;
+  border: 1px solid #ff4d4d;
+  color: #ff4d4d;
+  cursor: pointer;
+  
+  /* Dimensions */
+  flex: 0 0 32px; 
+  width: 32px;
+  height: 32px;
+  
+  /* Important: Set relative so we can position the icon absolutely */
+  position: relative;
+  
+  /* Pins the button to the extreme right */
+  margin-left: auto; 
+  
+  opacity: 0.6;
+  transition: all 0.2s ease;
+}
+
+/* Force the icon to center using absolute positioning */
+.delete-btn svg {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.delete-btn:hover {
+  background: #ff4d4d;
+  color: white;
+  opacity: 1;
+}

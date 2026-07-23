@@ -1,0 +1,236 @@
+@import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700&display=swap');
+
+html,
+body,
+#root {
+    width: 100%;
+    overflow-x: hidden;
+}
+
+/* WORKSHOP CONTAINER */
+.workshop {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    background: radial-gradient(circle at center, #0a1128 0%, #030303 70%);
+    overflow: hidden;
+    padding-top: clamp(70px, 10vh, 90px);
+    box-sizing: border-box;
+}
+
+/* Faint engineering grid overlay */
+.workshop::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: linear-gradient(to right, rgba(0, 71, 171, 0.05) 1px, transparent 1px),
+                     linear-gradient(to bottom, rgba(0, 71, 171, 0.05) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+}
+
+/* HOME SCREEN CONTAINER (Centered bottom controls) */
+.homeScreen {
+    position: absolute;
+    bottom: clamp(20px, 5vh, 50px);
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    z-index: 1000;
+    width: 90%;
+    max-width: 400px;
+    box-sizing: border-box;
+}
+
+/* START / MAIN BUTTON */
+.mainButton {
+    padding: clamp(12px, 2vh, 18px) clamp(24px, 5vw, 42px);
+    background: none;
+    color: white;
+    font-size: clamp(16px, 2vw, 19px);
+    font-weight: 700;
+    border: 2px solid #0047AB;
+    border-radius: 14px;
+    cursor: pointer;
+    transition: .3s;
+    font-family: 'Rajdhani', sans-serif;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 0 15px rgba(0, 71, 171, 0.3);
+}
+
+.mainButton:hover {
+    background: #000000;
+    transform: translateY(-2px);
+}
+
+/* SECONDARY BUTTONS (Top Left Stack) */
+.secondaryButtons {
+    position: absolute;
+    top: clamp(85px, 12vh, 110px);
+    left: clamp(15px, 3vw, 25px);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    z-index: 1000;
+    max-width: 220px;
+}
+
+.secondaryButton {
+    padding: clamp(10px, 1.5vh, 13px) clamp(14px, 2vw, 22px);
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(8px);
+    border: 2px solid #0047AB;
+    border-radius: 10px;
+    color: white;
+    cursor: pointer;
+    transition: .25s;
+    font-size: clamp(13px, 1.5vw, 15px);
+    text-align: left;
+    font-family: 'Rajdhani', sans-serif;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.secondaryButton:hover {
+    background: #000000;
+    transform: translateY(-2px);
+}
+
+/* MODAL AND GALLERY OVERLAYS */
+.modalOverlay, .galleryOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(5px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 3000;
+    padding: 15px;
+    box-sizing: border-box;
+}
+
+.modalContent, .galleryContent {
+    background: #171717;
+    padding: clamp(20px, 4vw, 40px);
+    border-radius: 16px;
+    color: white;
+    width: 100%;
+    max-width: 420px;
+    text-align: center;
+    border: 1px solid #333;
+    box-sizing: border-box;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+}
+
+.modalContent input {
+    width: 100%;
+    padding: 12px;
+    margin: 15px 0;
+    background: #0B0B0B;
+    border: 1px solid #444;
+    color: white;
+    border-radius: 6px;
+    box-sizing: border-box;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 15px;
+}
+
+.emptyState {
+    padding: 30px;
+    color: #888;
+    font-size: 14px;
+}
+
+.closeGallery {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background: #333;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 600;
+}
+
+.closeGallery:hover {
+    background: #444;
+}
+
+/* GALLERY LIST STYLES */
+.configList {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin: 15px 0;
+    max-height: 250px;
+    overflow-y: auto;
+}
+
+.configCard {
+    background: #222;
+    padding: 12px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+}
+
+.deleteBtn {
+    background: #8b0000;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+    font-family: 'Rajdhani', sans-serif;
+    white-space: nowrap;
+}
+
+.deleteBtn:hover {
+    background: #ff0000;
+}
+
+/* DISABLED STATE */
+.workshop-disabled {
+    pointer-events: none !important;
+    user-select: none;
+    filter: blur(2px);
+}
+
+/* MOBILE RESPONSIVE FIX FOR SECONDARY BUTTONS (FLUID SIZING & AUTO ICONS) */
+@media (max-width: 768px) {
+    .secondaryButtons {
+        top: 130px;
+        left: 12px;
+        max-width: 140px;
+        gap: 8px;
+    }
+
+    .secondaryButton {
+        padding: clamp(6px, 1.5vh, 10px) clamp(8px, 2vw, 14px);
+        font-size: clamp(10px, 3.2vw, 12px);
+    }
+
+    /* Auto scale any embedded icons inside the secondary buttons */
+    .secondaryButton svg,
+    .secondaryButton i {
+        font-size: clamp(11px, 3.5vw, 14px);
+        width: clamp(11px, 3.5vw, 14px);
+        height: auto;
+    }
+}

@@ -1,0 +1,70 @@
+@import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;600;700&display=swap');
+
+.splash-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100vw;
+  background: #000;
+  color: white;
+  font-family: 'Rajdhani', sans-serif;
+  text-align: center;
+  overflow: hidden;
+}
+
+.splash-title {
+  font-size: 64px;
+  font-weight: 700;
+  letter-spacing: 4px;
+  margin-bottom: 10px;
+  /* Ensure the title is centered */
+  display: flex;
+  justify-content: center;
+}
+
+.mecha { 
+  color: #0047AB; /* Cobalt Blue */
+}
+
+.lab { 
+  color: #FFFFFF; /* White */
+}
+.splash-subtitle {
+  font-size: 20px;
+  font-weight: 400;
+  color: #0047AB; /* Cobalt Blue */
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 40px;
+}
+
+.developer-tag {
+  font-size: 14px;
+  color: #666;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  position: absolute;
+  bottom: 40px;
+}
+
+/* Subtle loading animation */
+.loading-bar {
+  width: 200px;
+  height: 2px;
+  background: #333;
+  position: relative;
+}
+
+.loading-progress {
+  height: 100%;
+  background: #0047AB;
+  width: 0%;
+  animation: load 5s linear forwards; /* Matches your 5s timer */
+}
+
+@keyframes load {
+  from { width: 0%; }
+  to { width: 100%; }
+}

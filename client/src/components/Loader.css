@@ -1,0 +1,108 @@
+.loader-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: #030303;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 99999;
+  font-family: 'JetBrains Mono', 'Courier New', monospace;
+  overflow: hidden;
+}
+
+/* Subtle Sci-Fi Scanlines */
+.loader-scanlines {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    rgba(18, 16, 16, 0) 50%, 
+    rgba(0, 0, 0, 0.25) 50%
+  );
+  background-size: 100% 4px;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0.6;
+}
+
+.loader-container {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Outer Cyber Ring */
+.cyber-ring-outer {
+  width: 90px;
+  height: 90px;
+  border: 2px solid rgba(0, 71, 171, 0.2);
+  border-top: 2px solid #0047AB;
+  border-radius: 50%;
+  animation: cyberSpin 1s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 20px rgba(0, 71, 171, 0.2);
+}
+
+/* Inner Counter-Spinning Ring */
+.cyber-ring-inner {
+  width: 60px;
+  height: 60px;
+  border: 2px dashed rgba(0, 71, 171, 0.4);
+  border-bottom: 2px solid #0047AB;
+  border-radius: 50%;
+  animation: cyberSpinReverse 1.5s linear infinite;
+}
+
+/* Center Core Pulse */
+.loader-core-dot {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  background-color: #0047AB;
+  border-radius: 50%;
+  box-shadow: 0 0 15px #0047AB, 0 0 30px #0047AB;
+  animation: corePulse 1s ease-in-out infinite alternate;
+}
+
+/* Telemetry Text Layout */
+.loader-text-wrapper {
+  margin-top: 30px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.loader-sys-tag {
+  font-size: 10px;
+  letter-spacing: 3px;
+  color: rgba(0, 71, 171, 0.8);
+}
+
+.loader-status-text {
+  color: #ffffff;
+  font-size: 13px;
+  letter-spacing: 1.5px;
+  text-shadow: 0 0 10px rgba(0, 71, 171, 0.5);
+  font-weight: 600;
+}
+
+/* Animations */
+@keyframes cyberSpin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes cyberSpinReverse {
+  0% { transform: rotate(360deg); }
+  100% { transform: rotate(0deg); }
+}
+
+@keyframes corePulse {
+  0% { transform: scale(0.8); opacity: 0.5; }
+  100% { transform: scale(1.2); opacity: 1; }
+}

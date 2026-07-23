@@ -1,0 +1,217 @@
+@import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700&display=swap');
+
+.header {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    min-height: 70px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px clamp(10px, 3vw, 30px);
+    box-sizing: border-box;
+    background: rgba(0, 0, 0, 0.88);
+    backdrop-filter: blur(18px);
+    border-bottom: 2px solid #0047AB;
+    box-shadow: 0 4px 20px rgba(0,71,171,0.4);
+    z-index: 5000;
+    gap: 8px;
+}
+
+/* LOGO - Scales fluidly */
+.logoArea {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.logo {
+    width: clamp(90px, 15vw, 150px);
+    height: auto;
+    max-height: 60px;
+    object-fit: contain;
+}
+
+.logoArea h2 {
+    margin: 0;
+    font-size: clamp(16px, 2.5vw, 24px);
+    color: white;
+    font-weight: 700;
+}
+
+.logoArea p {
+    margin: 2px 0 0;
+    font-size: clamp(10px, 1.5vw, 13px);
+    color: #B9C2CE;
+}
+
+/* BUTTONS CONTAINER */
+.headerButtons {
+    display: flex;
+    gap: clamp(6px, 1.5vw, 15px);
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    flex: 1 1 auto;
+    max-width: 100%;
+}
+
+/* BUTTONS - Fluid padding, text, and sizing */
+.saveBtn, .tutorialBtn, .stopBtn, .logoutBtn {
+    padding: clamp(6px, 1.2vh, 12px) clamp(10px, 2vw, 22px);
+    background: #000000;
+    border-radius: 10px;
+    font-size: clamp(11px, 1.5vw, 15px);
+    font-weight: 600;
+    color: white;
+    cursor: pointer;
+    transition: .3s;
+    font-family: 'Rajdhani', sans-serif;
+    white-space: nowrap;
+}
+
+.saveBtn, .tutorialBtn {
+    border: 2px solid #0047AB;
+}
+
+.stopBtn {
+    border: 2px solid #d92b2b;
+}
+
+.logoutBtn {
+    border: 2px solid #ff0000;
+}
+
+.saveBtn:hover, .tutorialBtn:hover, .stopBtn:hover {
+    background: #000000;
+    transform: translateY(-2px);
+}
+
+.logoutBtn:hover {
+    background: #000000;
+    transform: translateY(-2px);
+    box-shadow: 0 0 15px rgba(0, 71, 171, 0.4);
+}
+
+.settingsIconBtn {
+    background: transparent;
+    border: 1px solid #0047AB;
+    color: #00bfff;
+    font-size: clamp(16px, 2vw, 20px);
+    width: clamp(35px, 5vw, 45px);
+    height: clamp(35px, 5vw, 45px);
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: 0.3s;
+    animation: rotateGear 10s linear infinite;
+}
+
+.settingsIconBtn:hover {
+    animation-play-state: paused;
+    border-color: white;
+    color: white;
+}
+
+@keyframes rotateGear {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* ==========================================================
+   MOBILE BREAKPOINT (< 768px) - FLUID CLAMP FONTS & EMBEDDED ICONS
+========================================================== */
+@media (max-width: 768px) {
+    .header {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        flex-direction: column;
+        align-items: stretch;
+        padding: 8px 10px;
+        box-sizing: border-box;
+    }
+
+    .logoArea {
+        justify-content: space-between;
+        width: 100%;
+    }
+
+    /* Reference frame container spanning full width */
+    .headerButtons {
+        position: relative;
+        width: 100%;
+        height: 42px;
+        display: block;
+        margin-top: 6px;
+    }
+
+    /* Build Mode Buttons anchored */
+    .saveBtn {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 31%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 5px;
+        text-align: center;
+        padding: 8px 4px;
+        font-size: clamp(10px, 3.2vw, 13px);
+        box-sizing: border-box;
+        white-space: nowrap;
+    }
+
+    .tutorialBtn {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        top: 0;
+        width: 35%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 5px;
+        text-align: center;
+        padding: 8px 4px;
+        font-size: clamp(10px, 3.2vw, 13px);
+        box-sizing: border-box;
+        white-space: nowrap;
+    }
+
+    .stopBtn {
+        position: absolute;
+        right: 0;
+        top: 0;
+        width: 31%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 5px;
+        text-align: center;
+        padding: 8px 4px;
+        font-size: clamp(10px, 3.2vw, 13px);
+        box-sizing: border-box;
+        white-space: nowrap;
+    }
+
+    /* Make sure Logout button displays nicely on the home screen instead of being hidden */
+    .logoutBtn {
+        display: block;
+        width: 100%;
+        text-align: center;
+        padding: 8px 12px;
+        font-size: 13px;
+        box-sizing: border-box;
+    }
+
+    .settingsIconBtn {
+        display: none; /* Keep hidden if not used here */
+    }
+}
