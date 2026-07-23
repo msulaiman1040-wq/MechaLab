@@ -11,11 +11,13 @@ connectDB();
 
 // Middleware - CORS must be defined first
 app.use(cors({
-    origin: "http://localhost:5173",
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"], // Added OPTIONS
+    origin: [
+        "http://localhost:5173",
+        "https://mecha-lab-five.vercel.app"
+    ],
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "x-auth-token"]
 }));
-
 app.use(express.json());
 
 // Routes
