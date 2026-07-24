@@ -22,7 +22,7 @@ export default function SaveModal({ isOpen, onClose }) {
     }
 
     try {
-      const response = await fetch('http://localhost:5000/api/config/save', {
+      const response = await fetch('https://mechalab-backend.onrender.com/api/config/save', {
         method: 'POST',
         headers: { 
           'Content-Type': 'application/json', 
