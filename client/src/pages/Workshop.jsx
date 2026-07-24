@@ -114,7 +114,7 @@ function Workshop() {
         const fetchConfigs = async () => {
             try {
                 const response = await fetch(
-                    "http://mechalab-backend.onrender.com/api/config/my-configs",
+                    "https://mechalab-backend.onrender.com/api/config/my-configs",
                     {
                         headers: {
                             "x-auth-token": localStorage.getItem("token")
@@ -137,7 +137,7 @@ function Workshop() {
     const handleDelete = async (id) => {
         try {
             const response = await fetch(
-                `http://mechalab-backend.onrender.com/api/config/delete/${id}`,
+                `https://mechalab-backend.onrender.com/api/config/delete/${id}`,
                 {
                     method: "DELETE",
                     headers: {
