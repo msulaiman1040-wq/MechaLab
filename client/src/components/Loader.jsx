@@ -1,24 +1,44 @@
 import "./Loader.css";
 
-export default function Loader({ text = "INITIALIZING MECHALAB SYSTEM..." }) {
-  return (
-    <div className="loader-overlay">
-      {/* Background Cyber Grid / Scanline FX */}
-      <div className="loader-scanlines" />
+export default function Loader({
+    progress = 0,
+    status = "INITIALIZING MECHALAB SYSTEM..."
+}) {
+    return (
+        <div className="loader-overlay">
 
-      <div className="loader-container">
-        {/* Glowing Cobalt Ring Spinner */}
-        <div className="cyber-ring-outer">
-          <div className="cyber-ring-inner" />
-          <div className="loader-core-dot" />
-        </div>
+            <div className="loader-scanlines" />
 
-        {/* Tactical Telemetry Text */}
-        <div className="loader-text-wrapper">
-          <span className="loader-sys-tag">[SYS_DIAGNOSTICS]</span>
-          <p className="loader-status-text">{text}</p>
+            <div className="loader-container">
+
+                <div className="cyber-ring">
+
+                    <div className="ring ring1"></div>
+                    <div className="ring ring2"></div>
+
+                    <div className="loader-core"></div>
+
+                </div>
+
+                <div className="loader-content">
+
+                    <span className="loader-tag">
+                        [ MECHALAB BOOT SEQUENCE ]
+                    </span>
+
+                    <h2 className="loader-title">
+                        MechaLab
+                    </h2>
+
+                    <p className="loader-status">
+                        {status}
+                    </p>
+
+
+                </div>
+
+            </div>
+
         </div>
-      </div>
-    </div>
-  );
+    );
 }

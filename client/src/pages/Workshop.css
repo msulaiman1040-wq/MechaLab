@@ -234,3 +234,7 @@ body,
         height: auto;
     }
 }
+.workshop-hidden{
+    opacity:0;
+    pointer-events:none;
+}

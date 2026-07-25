@@ -104,10 +104,8 @@ export default function Scene({ buildMode, onSceneReady }) {
     ref={controls}
     enableRotate
     enablePan
-    enableZoom={true}
-    minDistance={4}   // Prevents zooming in closer than this limit (adjust value as needed)
-    maxDistance={15}  // Prevents zooming out further than this limit (adjust value as needed)
     rotateSpeed={2.5}
+    enableZoom={false}
     panSpeed={2}
     autoRotate={!isInteracted}
     autoRotateSpeed={1.0}

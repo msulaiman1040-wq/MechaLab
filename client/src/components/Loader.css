@@ -1,108 +1,340 @@
-.loader-overlay {
-  position: fixed;
-  inset: 0;
-  background-color: #030303;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  z-index: 99999;
-  font-family: 'JetBrains Mono', 'Courier New', monospace;
-  overflow: hidden;
+@import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&display=swap');
+
+*{
+    font-family:'Rajdhani',sans-serif;
 }
 
-/* Subtle Sci-Fi Scanlines */
-.loader-scanlines {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    rgba(18, 16, 16, 0) 50%, 
-    rgba(0, 0, 0, 0.25) 50%
-  );
-  background-size: 100% 4px;
-  z-index: 1;
-  pointer-events: none;
-  opacity: 0.6;
+.loader-overlay{
+
+    position:fixed;
+    inset:0;
+
+    background:
+    radial-gradient(circle at center,#101828 0%,#05070c 100%);
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    overflow:hidden;
+
+    z-index:999999;
+
 }
 
-.loader-container {
-  position: relative;
-  z-index: 2;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+/* ======================= */
+
+.loader-scanlines{
+
+    position:absolute;
+    inset:0;
+
+    background:
+
+    repeating-linear-gradient(
+
+        to bottom,
+
+        rgba(255,255,255,.015),
+
+        rgba(255,255,255,.015) 2px,
+
+        transparent 2px,
+
+        transparent 4px
+
+    );
+
+    animation:scan 7s linear infinite;
+
 }
 
-/* Outer Cyber Ring */
-.cyber-ring-outer {
-  width: 90px;
-  height: 90px;
-  border: 2px solid rgba(0, 71, 171, 0.2);
-  border-top: 2px solid #0047AB;
-  border-radius: 50%;
-  animation: cyberSpin 1s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 0 20px rgba(0, 71, 171, 0.2);
+@keyframes scan{
+
+    from{
+
+        transform:translateY(0);
+
+    }
+
+    to{
+
+        transform:translateY(8px);
+
+    }
+
 }
 
-/* Inner Counter-Spinning Ring */
-.cyber-ring-inner {
-  width: 60px;
-  height: 60px;
-  border: 2px dashed rgba(0, 71, 171, 0.4);
-  border-bottom: 2px solid #0047AB;
-  border-radius: 50%;
-  animation: cyberSpinReverse 1.5s linear infinite;
+/* ======================= */
+
+.loader-container{
+
+    width:min(92vw,420px);
+
+    display:flex;
+
+    flex-direction:column;
+
+    align-items:center;
+
+    gap:30px;
+
+    text-align:center;
+
 }
 
-/* Center Core Pulse */
-.loader-core-dot {
-  position: absolute;
-  width: 12px;
-  height: 12px;
-  background-color: #0047AB;
-  border-radius: 50%;
-  box-shadow: 0 0 15px #0047AB, 0 0 30px #0047AB;
-  animation: corePulse 1s ease-in-out infinite alternate;
+/* ======================= */
+
+.cyber-ring{
+
+    position:relative;
+
+    width:clamp(90px,20vw,140px);
+
+    height:clamp(90px,20vw,140px);
+
 }
 
-/* Telemetry Text Layout */
-.loader-text-wrapper {
-  margin-top: 30px;
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
+.ring{
+
+    position:absolute;
+
+    inset:0;
+
+    border-radius:50%;
+
 }
 
-.loader-sys-tag {
-  font-size: 10px;
-  letter-spacing: 3px;
-  color: rgba(0, 71, 171, 0.8);
+.ring1{
+
+    border:5px solid #0047AB;
+
+    border-top-color:#53b4ff;
+
+    animation:rotate 2s linear infinite;
+
 }
 
-.loader-status-text {
-  color: #ffffff;
-  font-size: 13px;
-  letter-spacing: 1.5px;
-  text-shadow: 0 0 10px rgba(0, 71, 171, 0.5);
-  font-weight: 600;
+.ring2{
+
+    inset:12px;
+
+    border:4px solid rgba(83,180,255,.4);
+
+    border-bottom-color:#53b4ff;
+
+    animation:rotateReverse 1.4s linear infinite;
+
 }
 
-/* Animations */
-@keyframes cyberSpin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+.loader-core{
+
+    position:absolute;
+
+    top:50%;
+    left:50%;
+
+    width:18px;
+    height:18px;
+
+    transform:translate(-50%,-50%);
+
+    border-radius:50%;
+
+    background:#53b4ff;
+
+    box-shadow:
+
+    0 0 12px #53b4ff,
+
+    0 0 30px #53b4ff;
+
 }
 
-@keyframes cyberSpinReverse {
-  0% { transform: rotate(360deg); }
-  100% { transform: rotate(0deg); }
+/* ======================= */
+
+.loader-tag{
+
+    color:#53b4ff;
+
+    letter-spacing:2px;
+
+    font-size:.85rem;
+
+    font-weight:700;
+
 }
 
-@keyframes corePulse {
-  0% { transform: scale(0.8); opacity: 0.5; }
-  100% { transform: scale(1.2); opacity: 1; }
+.loader-title{
+
+    margin:12px 0 6px;
+
+    color:white;
+
+    font-size:clamp(2rem,5vw,2.8rem);
+
+    font-weight:700;
+
+}
+
+.loader-status{
+
+    color:#c6d1dd;
+
+    margin-bottom:18px;
+
+    font-size:1rem;
+
+    line-height:1.5;
+
+}
+
+/* ======================= */
+
+.loader-progress{
+
+    width:100%;
+
+    height:12px;
+
+    border-radius:999px;
+
+    overflow:hidden;
+
+    background:#13233f;
+
+    border:1px solid rgba(83,180,255,.25);
+
+}
+
+.loader-progress-fill{
+
+    height:100%;
+
+    width:0;
+
+    background:
+
+    linear-gradient(
+
+        90deg,
+
+        #0047AB,
+
+        #53b4ff
+
+    );
+
+    transition:width .4s ease;
+
+}
+
+.loader-percent{
+
+    display:block;
+
+    margin-top:10px;
+
+    color:#53b4ff;
+
+    font-size:1rem;
+
+    font-weight:700;
+
+}
+
+/* ======================= */
+
+@keyframes rotate{
+
+    from{
+
+        transform:rotate(0deg);
+
+    }
+
+    to{
+
+        transform:rotate(360deg);
+
+    }
+
+}
+
+@keyframes rotateReverse{
+
+    from{
+
+        transform:rotate(360deg);
+
+    }
+
+    to{
+
+        transform:rotate(0deg);
+
+    }
+
+}
+
+/* ======================= */
+/* MOBILE */
+/* ======================= */
+
+@media(max-width:768px){
+
+.loader-container{
+
+    width:90vw;
+
+    gap:24px;
+
+}
+
+.loader-status{
+
+    font-size:.95rem;
+
+}
+
+.loader-tag{
+
+    font-size:.72rem;
+
+}
+
+.loader-progress{
+
+    height:10px;
+
+}
+
+}
+
+/* ======================= */
+/* VERY SMALL PHONES */
+/* ======================= */
+
+@media(max-width:420px){
+
+.loader-title{
+
+    font-size:1.9rem;
+
+}
+
+.loader-status{
+
+    font-size:.88rem;
+
+}
+
+.loader-tag{
+
+    font-size:.68rem;
+
+    letter-spacing:1px;
+
+}
+
 }

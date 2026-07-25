@@ -1,4 +1,5 @@
-import { useWorkshop } from "../Context/WorkshopContext";
+import { playInstallSound } from "../managers/SoundManager";
+import { useWorkshop } from "../Context/WorkShopContext";
 import { useEffect, useState, useRef } from "react";
 import BuildManager from "../managers/BuildManager";
 import InstallManager from "../managers/InstallManager";
@@ -38,12 +39,14 @@ const images = {
 };
 
 export default function Workbench() {
-
-    const { finishInstall } = useWorkshop();
+    const workshopContext = useWorkshop() || {};
+    const finishInstall = workshopContext.finishInstall || (() => {});
 
     const [, forceUpdate] = useState(0);
     const [activeDraggedId, setActiveDraggedId] = useState(null);
     const longPressTimerRef = useRef(null);
+    const touchStartPos = useRef({ x: 0, y: 0 });
+    const isTouchDragging = useRef(false);
 
     const [menu, setMenu] = useState({
         visible: false,
@@ -58,7 +61,20 @@ export default function Workbench() {
         });
     }, []);
 
-    const startDrag = (e, id) => {
+    // Completely disable native browser context menus app-wide
+    useEffect(() => {
+        const handleContextMenu = (e) => {
+            e.preventDefault();
+        };
+        window.addEventListener("contextmenu", handleContextMenu);
+        return () => {
+            window.removeEventListener("contextmenu", handleContextMenu);
+        };
+    }, []);
+
+    // --- MOUSE DRAG HANDLERS ---
+    const startMouseDrag = (e, id) => {
+        if (e.button !== 0) return;
         e.preventDefault();
         e.stopPropagation();
 
@@ -66,9 +82,8 @@ export default function Workbench() {
         BuildManager.startDragging(id);
     };
 
-    const move = (e) => {
-        if (!BuildManager.draggingPart)
-            return;
+    const handleMouseMove = (e) => {
+        if (!BuildManager.draggingPart) return;
 
         BuildManager.movePart(
             BuildManager.draggingPart,
@@ -77,9 +92,8 @@ export default function Workbench() {
         );
     };
 
-    const stopDrag = (e) => {
-        if (!BuildManager.draggingPart)
-            return;
+    const handleMouseUp = (e) => {
+        if (!BuildManager.draggingPart) return;
 
         const dragged = BuildManager.workbench.find(
             p => p.id === BuildManager.draggingPart
@@ -96,32 +110,124 @@ export default function Workbench() {
             dragged.type
         );
 
-        if (hit) {
-            InstallManager.install(dragged.type);
-            BuildManager.installPart(dragged.id);
-            finishInstall(dragged.type);
-        } else {
-            BuildManager.stopDragging(
-                dragged.id
-            );
+if (hit) {
+
+    InstallManager.install(dragged.type);
+
+    BuildManager.installPart(dragged.id);
+
+    playInstallSound(dragged.type);
+
+    finishInstall(dragged.type);
+
+} else {
+            BuildManager.stopDragging(dragged.id);
         }
 
         setActiveDraggedId(null);
     };
 
+    // --- TOUCH HANDLERS ---
+    const handleTouchStart = (e, id) => {
+        if (e.cancelable) {
+            e.preventDefault();
+        }
+        e.stopPropagation();
+
+        const touch = e.touches[0];
+        if (!touch) return;
+
+        touchStartPos.current = { x: touch.clientX, y: touch.clientY };
+        isTouchDragging.current = false;
+
+        if (longPressTimerRef.current) clearTimeout(longPressTimerRef.current);
+
+        // 500ms long press triggers custom context menu
+        longPressTimerRef.current = setTimeout(() => {
+            if (!isTouchDragging.current) {
+                openMenu(e, id, touch.clientX, touch.clientY);
+            }
+        }, 500);
+    };
+
+    const handleTouchMove = (e) => {
+        if (e.cancelable) {
+            e.preventDefault();
+        }
+        e.stopPropagation();
+
+        const touch = e.touches[0];
+        if (!touch) return;
+
+        const dx = Math.abs(touch.clientX - touchStartPos.current.x);
+        const dy = Math.abs(touch.clientY - touchStartPos.current.y);
+
+        // If moved past threshold, cancel long press and switch to touch drag
+        if (dx > 8 || dy > 8) {
+            if (longPressTimerRef.current) {
+                clearTimeout(longPressTimerRef.current);
+                longPressTimerRef.current = null;
+            }
+            isTouchDragging.current = true;
+        }
+
+        if (isTouchDragging.current && BuildManager.draggingPart) {
+            BuildManager.movePart(
+                BuildManager.draggingPart,
+                touch.clientX - 45,
+                touch.clientY - 45
+            );
+        }
+    };
+
+    const handleTouchEnd = (e) => {
+        e.stopPropagation();
+
+        if (longPressTimerRef.current) {
+            clearTimeout(longPressTimerRef.current);
+            longPressTimerRef.current = null;
+        }
+
+        if (isTouchDragging.current && BuildManager.draggingPart) {
+            const touch = e.changedTouches[0] || {};
+            const dragged = BuildManager.workbench.find(
+                p => p.id === BuildManager.draggingPart
+            );
+
+            if (dragged) {
+                const hit = RaycasterManager.cast(
+                    touch.clientX || 0,
+                    touch.clientY || 0,
+                    dragged.type
+                );
+
+                if (hit) {
+                    InstallManager.install(dragged.type);
+                    BuildManager.installPart(dragged.id);
+                    finishInstall(dragged.type);
+                } else {
+                    BuildManager.stopDragging(dragged.id);
+                }
+            }
+        }
+
+        isTouchDragging.current = false;
+        setActiveDraggedId(null);
+    };
+
     useEffect(() => {
-        window.addEventListener("pointermove", move);
-        window.addEventListener("pointerup", stopDrag);
+        window.addEventListener("pointermove", handleMouseMove);
+        window.addEventListener("pointerup", handleMouseUp);
 
         return () => {
-            window.removeEventListener("pointermove", move);
-            window.removeEventListener("pointerup", stopDrag);
+            window.removeEventListener("pointermove", handleMouseMove);
+            window.removeEventListener("pointerup", handleMouseUp);
         };
     }, []);
 
     const openMenu = (e, id, clientX, clientY) => {
-        e.preventDefault();
-        e.stopPropagation();
+        if (e.preventDefault) e.preventDefault();
+        if (e.stopPropagation) e.stopPropagation();
 
         setMenu({
             visible: true,
@@ -147,28 +253,6 @@ export default function Workbench() {
         closeMenu();
     };
 
-    // Handlers for mobile long-press detection
-    const handleTouchStart = (e, id) => {
-        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-        const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-
-        // Clear any existing timer
-        if (longPressTimerRef.current) clearTimeout(longPressTimerRef.current);
-
-        // Set a 500ms threshold for a long-press to trigger the context menu
-        longPressTimerRef.current = setTimeout(() => {
-            openMenu(e, id, clientX, clientY);
-        }, 500);
-    };
-
-    const handleTouchMoveOrEnd = () => {
-        // Cancel the long-press timer if the user moves or lifts their finger early (so it's a drag or tap instead)
-        if (longPressTimerRef.current) {
-            clearTimeout(longPressTimerRef.current);
-            longPressTimerRef.current = null;
-        }
-    };
-
     return (
         <>
             {BuildManager.workbench.map(part => {
@@ -181,16 +265,18 @@ export default function Workbench() {
                         draggable={false}
                         onDragStart={e => e.preventDefault()}
                         onContextMenu={e => openMenu(e, part.id, e.clientX, e.clientY)}
-                        onTouchStart={(e) => handleTouchStart(e, part.id)}
-                        onTouchMove={handleTouchMoveOrEnd}
-                        onTouchEnd={handleTouchMoveOrEnd}
                         onPointerDown={(e) => {
-                            if (e.button !== undefined && e.button !== 0)
-                                return;
-
-                            handleTouchStart(e, part.id);
-                            startDrag(e, part.id);
+                            if (e.pointerType === "mouse") {
+                                startMouseDrag(e, part.id);
+                            }
                         }}
+                        onTouchStart={(e) => {
+                            handleTouchStart(e, part.id);
+                            setActiveDraggedId(part.id);
+                            BuildManager.startDragging(part.id);
+                        }}
+                        onTouchMove={handleTouchMove}
+                        onTouchEnd={handleTouchEnd}
                         style={{
                             position: "fixed",
                             left: part.x,
@@ -204,6 +290,7 @@ export default function Workbench() {
                             WebkitUserSelect: "none",
                             WebkitUserDrag: "none",
                             touchAction: "none",
+                            WebkitTouchCallout: "none",
                             pointerEvents: isThisDragging ? "none" : "auto",
                             transform: isThisDragging ? "scale(1.15) rotate(3deg)" : "scale(1) rotate(0deg)",
                             filter: isThisDragging 

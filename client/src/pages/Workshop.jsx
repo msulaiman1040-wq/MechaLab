@@ -153,17 +153,28 @@ function Workshop() {
         }
     };
 
-    const handleLoad = (parts) => {
-        setIsGalleryOpen(false);
+const handleLoad = (parts) => {
+
+    setIsGalleryOpen(false);
+
+    clearAssembly();
+
+    BuildManager.setTutorialMode(false);
+    setIsAssemblyTutorialActive(false);
+    setShowWelcomeCard(false);
+
+    // Enter build mode FIRST
+    setBuildMode(true);
+
+    // Wait until Workshop has rendered
+    setTimeout(() => {
+
         InstallManager.loadConfiguration(parts);
         BuildManager.loadConfiguration(parts);
-        clearAssembly();
-        BuildManager.setTutorialMode(false);
-        setIsAssemblyTutorialActive(false);
-        setShowWelcomeCard(false);
-        setBuildMode(true);
-    };
 
+    }, 0);
+
+};
     const startNewBuild = () => {
         InstallManager.reset();
         BuildManager.reset();
@@ -251,13 +262,15 @@ function Workshop() {
         }
     };
 
-    // Show Loader component while 3D environment assets are compiling/loading
-    if (!isFullyLoaded) {
-        return <Loader text={`Loading Workshop: ${Math.floor(progress)}%`} />;
-    }
 
     return (
         <>
+        {!isFullyLoaded && (
+    <Loader
+        progress={progress}
+        status={`Loading Workshop: ${Math.floor(progress)}%`}
+    />
+)}
             <WorkshopGreeting/>
             
             {/* Assembly Tutorial Welcome Overlay Card */}
@@ -278,9 +291,10 @@ function Workshop() {
                 />
             )}
 
-            <div
-                className={`workshop ${
-                    isSaveModalOpen ||
+<div
+    className={`workshop ${
+        !isFullyLoaded ? "workshop-hidden" : ""
+    } ${                    isSaveModalOpen ||
                     isSettingsOpen ||
                     isGalleryOpen ||
                     (isTutorialOpen && !isSpotlightActive) ||

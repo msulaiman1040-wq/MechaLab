@@ -35,68 +35,105 @@ const parts = [
 ];
 
 export default function PartTray({ onPartDoubleClick }) {
+
   const [, forceUpdate] = useState(0);
-  const lastTapTimeRef = useRef({});
+
+  const lastTapRef = useRef({});
 
   useEffect(() => {
     const unsubscribe = BuildManager.subscribe(() => {
-      forceUpdate((x) => x + 1);
+      forceUpdate(x => x + 1);
     });
+
     return () => unsubscribe();
   }, []);
 
   const takePart = (id) => {
     BuildManager.takePart(id);
+
     if (onPartDoubleClick) {
       onPartDoubleClick(id);
     }
   };
 
-  // Handles both desktop double-click and mobile responsive double-tap/quick taps
-  const handleInteraction = (id) => {
-    const now = Date.now();
-    const lastTime = lastTapTimeRef.current[id] || 0;
-    const DOUBLE_TAP_WINDOW = 350; // Milliseconds threshold
+  // Mobile double tap
+  const handleTouchEnd = (id) => {
 
-    if (now - lastTime < DOUBLE_TAP_WINDOW) {
+    const now = Date.now();
+    const lastTap = lastTapRef.current[id] || 0;
+
+    if (now - lastTap < 350) {
+
       takePart(id);
-      lastTapTimeRef.current[id] = 0; // Reset
+
+      lastTapRef.current[id] = 0;
+
     } else {
-      lastTapTimeRef.current[id] = now;
+
+      lastTapRef.current[id] = now;
+
     }
+
   };
 
   return (
     <div className="partTray">
+
       <div className="carouselWindow">
+
         <div className="carousel" id="carocaro">
-          {parts.map((part) => {
+
+          {parts.map(part => {
+
             const qty = BuildManager.inventory[part.id];
+
             if (qty <= 0) return null;
 
             return (
+
               <div
                 key={part.id}
-                data-part-id={part.id}
                 className="partCircle"
-                draggable="false"
+                data-part-id={part.id}
+                draggable={false}
                 onMouseDown={(e) => e.preventDefault()}
+
+                // Desktop
                 onDoubleClick={(e) => {
                   e.preventDefault();
                   takePart(part.id);
                 }}
-                onClick={(e) => {
+
+                // Mobile
+                onTouchEnd={(e) => {
                   e.preventDefault();
-                  handleInteraction(part.id);
+                  handleTouchEnd(part.id);
                 }}
+
               >
-                <img src={part.image} alt="" draggable="false" />
-                {qty > 1 && <div className="quantityBadge">{qty}×</div>}
+
+                <img
+                  src={part.image}
+                  alt=""
+                  draggable={false}
+                />
+
+                {qty > 1 && (
+                  <div className="quantityBadge">
+                    {qty}×
+                  </div>
+                )}
+
               </div>
+
             );
+
           })}
+
         </div>
+
       </div>
+
     </div>
   );
 }

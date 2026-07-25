@@ -19,7 +19,6 @@ export default function TutorialStepOverlay({ stepData, currentStep }) {
                     const rect = targetItem.getBoundingClientRect();
                     if (rect.width > 0 && rect.height > 0) {
                         if (isSmallScreen) {
-                            // Step 1 on mobile: Position card slightly higher up so the bottom border doesn't get clipped
                             setCoords({
                                 top: Math.min(rect.top + rect.height / 2, window.innerHeight - 150),
                                 left: rect.right + 15,
@@ -53,7 +52,6 @@ export default function TutorialStepOverlay({ stepData, currentStep }) {
                     mode: isSmallScreen ? "fixed-upper" : "standard"
                 });
             } else if (currentStep === 2) {
-                // Step 2 on mobile: Card sits above chassis, arrow points DOWN towards the chassis
                 setCoords({
                     top: isSmallScreen ? window.innerHeight * 0.28 : window.innerHeight * 0.35,
                     left: window.innerWidth * 0.5,
@@ -62,7 +60,7 @@ export default function TutorialStepOverlay({ stepData, currentStep }) {
                 });
             } else if (currentStep >= 3) {
                 setCoords({
-                    top: window.innerHeight * 0.2,
+                    top: Math.max(80, window.innerHeight * 0.25),
                     left: window.innerWidth * 0.5,
                     arrowOffset: 0,
                     mode: isSmallScreen ? "fixed-upper" : "standard"
@@ -85,6 +83,7 @@ export default function TutorialStepOverlay({ stepData, currentStep }) {
     const isMobileSideLeft = coords.mode === "mobile-side-left";
     const isMobileDown = coords.mode === "mobile-down";
     const isFixedUpper = coords.mode === "fixed-upper";
+    const isFinalStep = currentStep >= 3;
 
     return (
         <AnimatePresence>
@@ -106,7 +105,7 @@ export default function TutorialStepOverlay({ stepData, currentStep }) {
                         left: `${coords.left}px`,
                         transform: isMobileSideLeft 
                             ? "translate(0, -50%)" 
-                            : isMobileDown
+                            : isMobileDown || isFinalStep
                                 ? "translate(-50%, 0%)" 
                                 : isFixedUpper 
                                     ? "translate(-50%, 0%)" 
@@ -115,9 +114,7 @@ export default function TutorialStepOverlay({ stepData, currentStep }) {
                         display: "flex",
                         flexDirection: isMobileSideLeft 
                             ? "row-reverse" 
-                            : isMobileDown
-                                ? "column" // Flows downward so arrow sits under the card pointing down
-                                : "column",
+                            : "column",
                         alignItems: "center",
                         transition: "top 0.05s linear, left 0.05s linear"
                     }}
@@ -211,7 +208,7 @@ export default function TutorialStepOverlay({ stepData, currentStep }) {
                     </div>
 
                     {/* Arrow for Step 1 (points left towards the tray item) */}
-                    {isMobileSideLeft && (
+                    {!isFinalStep && isMobileSideLeft && (
                         <div
                             style={{
                                 width: 0,
@@ -225,7 +222,7 @@ export default function TutorialStepOverlay({ stepData, currentStep }) {
                     )}
 
                     {/* Arrow for Step 2 on mobile (placed underneath card, pointing DOWN towards the chassis) */}
-                    {isMobileDown && (
+                    {!isFinalStep && isMobileDown && (
                         <div
                             style={{
                                 width: 0,
@@ -239,7 +236,7 @@ export default function TutorialStepOverlay({ stepData, currentStep }) {
                     )}
 
                     {/* Standard top arrow for desktop mode */}
-                    {!isFixedUpper && !isMobileSideLeft && !isMobileDown && (
+                    {!isFinalStep && !isFixedUpper && !isMobileSideLeft && !isMobileDown && (
                         <div
                             style={{
                                 width: 0,

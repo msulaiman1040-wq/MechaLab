@@ -48,26 +48,46 @@ this.driveDirection = 1;
 
         this.listeners = [];
 
-        //=========================================
+//=========================================
         // AUDIO
         //=========================================
 
         this.startAudio = new Audio(carStart);
 
-        this.idleAudio = new Audio(carIdle);
+        this.idleAudio1 = new Audio(carIdle);
+        this.idleAudio2 = new Audio(carIdle);
+        this.activeIdle = this.idleAudio1;
 
         this.roarAudio = new Audio(roar);
 
         this.brakeAudio = new Audio(braking);
-
-        this.idleAudio.loop = true;
-
+//=========================================
+        // START SOUND FINISHED / CROSSFADE
         //=========================================
-        // START SOUND FINISHED
-        //=========================================
+
+        this.startAudio.addEventListener("timeupdate", () => {
+            if (!this.engineRunning || !this.engineStarting) return;
+
+            const timeLeft = this.startAudio.duration - this.startAudio.currentTime;
+
+            // When there are 0.6 seconds left of the start sound, crossfade into idle
+            if (timeLeft <= 0.6 && this.activeIdle.paused) {
+                this.activeIdle.currentTime = 0;
+                this.activeIdle.volume = 0;
+                this.activeIdle.play().catch(() => {});
+
+                let crossfade = setInterval(() => {
+                    if (this.activeIdle.volume < 1.0) {
+                        this.activeIdle.volume = Math.min(1.0, this.activeIdle.volume + 0.1);
+                        this.startAudio.volume = Math.max(0.0, this.startAudio.volume - 0.1);
+                    } else {
+                        clearInterval(crossfade);
+                    }
+                }, 50);
+            }
+        });
 
         this.startAudio.onended = () => {
-
             if (!this.engineRunning)
                 return;
 
@@ -75,15 +95,54 @@ this.driveDirection = 1;
 
             this.state = "IDLING";
 
-            this.idleAudio.currentTime = 0;
-
-            this.idleAudio.play();
+            this.startAudio.volume = 1.0;
 
             this.notify();
-
         };
 
         //=========================================
+        // DUAL-BUFFER SEAMLESS IDLE LOOP
+        //=========================================
+
+        const handleIdleProgress = (currentAudio, nextAudio) => {
+            if (!this.engineRunning || this.state !== "IDLING") return;
+
+            const timeLeft = currentAudio.duration - currentAudio.currentTime;
+
+            // Trigger the alternate audio track 0.3 seconds before the current one finishes
+            if (timeLeft <= 0.3 && nextAudio.paused && !currentAudio._transitioning) {
+                currentAudio._transitioning = true;
+                
+                nextAudio.currentTime = 0;
+                nextAudio.volume = 1.0;
+                nextAudio.play().catch(() => {});
+
+                // Brief crossfade overlap between the two idle channels
+                let fade = setInterval(() => {
+                    if (currentAudio.volume > 0) {
+                        currentAudio.volume = Math.max(0, currentAudio.volume - 0.2);
+                    } else {
+                        clearInterval(fade);
+                        currentAudio.pause();
+                        currentAudio._transitioning = false;
+                        this.activeIdle = nextAudio;
+                    }
+                }, 50);
+            }
+        };
+
+        this.idleAudio1.addEventListener("timeupdate", () => {
+            if (this.activeIdle === this.idleAudio1) {
+                handleIdleProgress(this.idleAudio1, this.idleAudio2);
+            }
+        });
+
+        this.idleAudio2.addEventListener("timeupdate", () => {
+            if (this.activeIdle === this.idleAudio2) {
+                handleIdleProgress(this.idleAudio2, this.idleAudio1);
+            }
+        });
+                //=========================================
         // ROAR FINISHED
         //=========================================
 

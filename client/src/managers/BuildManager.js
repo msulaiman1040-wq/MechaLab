@@ -71,23 +71,27 @@ class BuildManager {
         
         this.reset(); 
 
-        Object.keys(savedParts).forEach(type => {
-            const count = savedParts[type];
-            for (let i = 0; i < count; i++) {
-                if (this.inventory[type] > 0) {
-                    this.inventory[type]--;
-                    const newPart = {
-                        id: Date.now() + Math.random() + i,
-                        type: type,
-                        x: 0,
-                        y: 0,
-                        dragging: false
-                    };
-                    this.installed.push(newPart);
-                }
-            }
+Object.entries(savedParts).forEach(([type, count]) => {
+
+    if (!this.inventory.hasOwnProperty(type))
+        return;
+
+    this.inventory[type] = Math.max(
+        0,
+        this.initialInventory[type] - count
+    );
+
+    for (let i = 0; i < count; i++) {
+
+        this.installed.push({
+            id: crypto.randomUUID(),
+            type,
+            installed: true
         });
 
+    }
+
+});
         console.log("4. Final installed state:", this.installed);
         this.notify();
     }
