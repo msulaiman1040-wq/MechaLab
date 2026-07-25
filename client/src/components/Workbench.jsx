@@ -1,5 +1,5 @@
 import { playInstallSound } from "../managers/SoundManager";
-import { useWorkshop } from "../Context/WorkShopContext";
+import { useWorkshop } from "../Context/WorkshopContext";
 import { useEffect, useState, useRef } from "react";
 import BuildManager from "../managers/BuildManager";
 import InstallManager from "../managers/InstallManager";
