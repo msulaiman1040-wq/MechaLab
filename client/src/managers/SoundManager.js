@@ -20,17 +20,41 @@ const sounds = {
 export const playInstallSound = (partId) => {
     let activeSound = null;
 
-    if (['engine', 'gear-box', 'brake-disc-caliper', 'radiator', 'exhaust-pipe', 'tire'].includes(partId)) {
+    if ([
+        'engine', 
+        'gear-box', 
+        'brake-fl', 
+        'brake-fr', 
+        'brake-rl', 
+        'brake-rr', 
+        'radiator', 
+        'exhaust-pipe', 
+        'front-left-wheel', 
+        'front-right-wheel', 
+        'rear-left-wheel', 
+        'rear-right-wheel'
+    ].includes(partId)) {
         activeSound = sounds.wrench;
     } else if (partId === 'body') {
         activeSound = sounds.sheet;
-    } else if (['front-seat', 'rear-seat'].includes(partId)) {
+    } else if ([
+        'left-seat', 
+        'right-seat', 
+        'rear-seat'
+    ].includes(partId)) {
         activeSound = sounds.latch;
-    } else if (partId === 'fender') {
+    } else if ([
+        'left-fender', 
+        'right-fender'
+    ].includes(partId)) {
         activeSound = sounds.move;
     } else if (partId === 'battery') {
         activeSound = sounds.zap;
-    } else if (['pedals', 'fuel-tank', 'steering-wheel'].includes(partId)) {
+    } else if ([
+        'pedals', 
+        'fuel-tank', 
+        'steering-wheel'
+    ].includes(partId)) {
         activeSound = sounds.clack;
     }
 

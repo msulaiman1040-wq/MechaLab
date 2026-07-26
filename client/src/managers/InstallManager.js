@@ -10,12 +10,28 @@ class InstallManager {
             "gear-box": 0,
             "steering-wheel": 0,
             pedals: 0,
-            "front-seat": 0,
-            "rear-seat": 0,
-            fender: 0,
             "exhaust-pipe": 0,
-            tire: 0,
-            "brake-disc-caliper": 0
+            
+            // Unique Seats
+            "left-seat": 0,
+            "right-seat": 0,
+            "rear-seat": 0,
+
+            // Unique Fenders
+            "left-fender": 0,
+            "right-fender": 0,
+
+            // Unique Wheels / Tires
+            "front-left-wheel": 0,
+            "front-right-wheel": 0,
+            "rear-right-wheel": 0,
+            "rear-left-wheel": 0,
+
+            // Unique Brakes & Calipers
+            "brake-fl": 0,
+            "brake-fr": 0,
+            "brake-rr": 0,
+            "brake-rl": 0
         };
 
         this.installed = { ...this.initialState };
@@ -23,7 +39,7 @@ class InstallManager {
         this.resetListeners = []; 
     }
 
-    // NEW: Load a saved state
+    // Load a saved state
     loadConfiguration(parts) {
         this.reset(); // Clear current 3D scene first
         this.installed = { ...this.initialState, ...parts };
@@ -36,22 +52,23 @@ class InstallManager {
         this.notify();
     }
 
-subscribe(cb) {
-    this.listeners.push(cb);
+    subscribe(cb) {
+        this.listeners.push(cb);
 
-    return () => {
-        this.listeners = this.listeners.filter(l => l !== cb);
-    };
-}
+        return () => {
+            this.listeners = this.listeners.filter(l => l !== cb);
+        };
+    }
+
     onReset(cb) {
         this.resetListeners.push(cb);
     }
 
-notify() {
-    console.log("NOTIFY CHANGE", this.installed);
+    notify() {
+        console.log("NOTIFY CHANGE", this.installed);
+        this.listeners.forEach(cb => cb(this.installed));
+    }
 
-    this.listeners.forEach(cb => cb(this.installed));
-}
     install(part) {
         if (this.installed[part] === undefined) return;
         this.installed[part]++;

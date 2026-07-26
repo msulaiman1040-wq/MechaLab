@@ -18,26 +18,41 @@ import tire from "../assets/parts/tire.png";
 import brakeDisc from "../assets/parts/brake-disc-caliper.png";
 
 const parts = [
-  { id: "engine", image: engine },
-  { id: "body", image: body },
-  { id: "battery", image: battery },
-  { id: "radiator", image: radiator },
-  { id: "fuel-tank", image: fuelTank },
-  { id: "gear-box", image: gearBox },
-  { id: "steering-wheel", image: steeringWheel },
-  { id: "pedals", image: pedals },
-  { id: "front-seat", image: frontSeat },
-  { id: "rear-seat", image: rearSeat },
-  { id: "fender", image: fender },
-  { id: "exhaust-pipe", image: exhaustPipe },
-  { id: "tire", image: tire },
-  { id: "brake-disc-caliper", image: brakeDisc },
+  { id: "engine", name: "Engine", image: engine },
+  { id: "body", name: "Chassis Body", image: body },
+  { id: "battery", name: "Battery", image: battery },
+  { id: "radiator", name: "Radiator", image: radiator },
+  { id: "fuel-tank", name: "Fuel Tank", image: fuelTank },
+  { id: "gear-box", name: "Gear Box", image: gearBox },
+  { id: "steering-wheel", name: "Steering Wheel", image: steeringWheel },
+  { id: "pedals", name: "Pedals", image: pedals },
+  
+  // Unique Seats
+  { id: "left-seat", name: "Left Front Seat", image: frontSeat },
+  { id: "right-seat", name: "Right Front Seat", image: frontSeat },
+  { id: "rear-seat", name: "Rear Seat", image: rearSeat },
+
+  // Unique Fenders
+  { id: "left-fender", name: "Left Fender", image: fender },
+  { id: "right-fender", name: "Right Fender", image: fender },
+
+  { id: "exhaust-pipe", name: "Exhaust Pipe", image: exhaustPipe },
+
+  // Unique Wheels / Tires
+  { id: "front-left-wheel", name: "Front Left Wheel", image: tire },
+  { id: "front-right-wheel", name: "Front Right Wheel", image: tire },
+  { id: "rear-left-wheel", name: "Rear Right Wheel", image: tire },
+  { id: "rear-right-wheel", name: "Rear  Wheel", image: tire },
+
+  // Unique Brakes & Calipers
+  { id: "brake-fl", name: "Front-Left Brake", image: brakeDisc },
+  { id: "brake-fr", name: "Front-Right Brake", image: brakeDisc },
+  { id: "brake-rl", name: "Rear-Left Brake", image: brakeDisc },
+  { id: "brake-rr", name: "Rear-Right Brake", image: brakeDisc }
 ];
 
 export default function PartTray({ onPartDoubleClick }) {
-
   const [, forceUpdate] = useState(0);
-
   const lastTapRef = useRef({});
 
   useEffect(() => {
@@ -58,82 +73,67 @@ export default function PartTray({ onPartDoubleClick }) {
 
   // Mobile double tap
   const handleTouchEnd = (id) => {
-
     const now = Date.now();
     const lastTap = lastTapRef.current[id] || 0;
 
     if (now - lastTap < 350) {
-
       takePart(id);
-
       lastTapRef.current[id] = 0;
-
     } else {
-
       lastTapRef.current[id] = now;
-
     }
-
   };
 
   return (
     <div className="partTray">
-
       <div className="carouselWindow">
-
         <div className="carousel" id="carocaro">
-
           {parts.map(part => {
+            const qty = BuildManager.inventory ? BuildManager.inventory[part.id] : 0;
 
-            const qty = BuildManager.inventory[part.id];
-
-            if (qty <= 0) return null;
+            if (qty === undefined || qty <= 0) return null;
 
             return (
-
               <div
                 key={part.id}
-                className="partCircle"
-                data-part-id={part.id}
-                draggable={false}
-                onMouseDown={(e) => e.preventDefault()}
-
-                // Desktop
+                className="partItemWrapper"
                 onDoubleClick={(e) => {
                   e.preventDefault();
                   takePart(part.id);
                 }}
-
-                // Mobile
                 onTouchEnd={(e) => {
                   e.preventDefault();
                   handleTouchEnd(part.id);
                 }}
-
               >
-
-                <img
-                  src={part.image}
-                  alt=""
+                <div
+                  className="partCircle"
+                  data-part-id={part.id}
                   draggable={false}
-                />
+                  onMouseDown={(e) => e.preventDefault()}
+                >
+                  <img
+                    src={part.image}
+                    alt={part.name}
+                    draggable={false}
+                  />
 
-                {qty > 1 && (
-                  <div className="quantityBadge">
-                    {qty}×
-                  </div>
-                )}
+                  {/* Inline Expanding Name Text */}
+                  <span className="partTooltip">
+                    {part.name}
+                  </span>
 
+                  {qty > 1 && (
+                    <div className="quantityBadge">
+                      {qty}×
+                    </div>
+                  )}
+                </div>
               </div>
-
             );
-
           })}
-
         </div>
-
       </div>
-
     </div>
   );
 }

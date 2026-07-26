@@ -10,10 +10,10 @@ export default function TutorialStepOverlay({ stepData, currentStep }) {
 
             if (currentStep === 1) {
                 const targetItem = 
-                    document.querySelector('[data-part-id="brake-disc-caliper"]') ||
+                    document.querySelector('[data-part-id="brake-fl"]') ||
                     document.querySelector('.workbench-part') ||
                     document.querySelector('.draggable-part') ||
-                    document.querySelector('.item-brake-disc-caliper');
+                    document.querySelector('.item-brake-fl');
 
                 if (targetItem) {
                     const rect = targetItem.getBoundingClientRect();
@@ -52,6 +52,31 @@ export default function TutorialStepOverlay({ stepData, currentStep }) {
                     mode: isSmallScreen ? "fixed-upper" : "standard"
                 });
             } else if (currentStep === 2) {
+                const targetItem = 
+                    document.querySelector('[data-mesh-name*="brake"]') ||
+                    document.querySelector('[data-part-id="brake-fl"]') ||
+                    document.querySelector('.vehicle-part-brake-fl');
+
+                if (targetItem) {
+                    const rect = targetItem.getBoundingClientRect();
+                    if (rect.width > 0 && rect.height > 0) {
+                        const targetX = rect.left + rect.width / 2;
+                        const boxWidthHalf = 170;
+                        const minBoxX = boxWidthHalf + 20;
+                        const maxBoxX = window.innerWidth - boxWidthHalf - 20;
+                        let boxX = Math.max(minBoxX, Math.min(maxBoxX, targetX));
+                        let arrowShift = targetX - boxX;
+
+                        setCoords({
+                            top: rect.top - 15,
+                            left: boxX,
+                            arrowOffset: arrowShift,
+                            mode: "standard"
+                        });
+                        return;
+                    }
+                }
+
                 setCoords({
                     top: isSmallScreen ? window.innerHeight * 0.28 : window.innerHeight * 0.35,
                     left: window.innerWidth * 0.5,
@@ -207,7 +232,6 @@ export default function TutorialStepOverlay({ stepData, currentStep }) {
                         )}
                     </div>
 
-                    {/* Arrow for Step 1 (points left towards the tray item) */}
                     {!isFinalStep && isMobileSideLeft && (
                         <div
                             style={{
@@ -221,7 +245,6 @@ export default function TutorialStepOverlay({ stepData, currentStep }) {
                         />
                     )}
 
-                    {/* Arrow for Step 2 on mobile (placed underneath card, pointing DOWN towards the chassis) */}
                     {!isFinalStep && isMobileDown && (
                         <div
                             style={{
@@ -235,7 +258,6 @@ export default function TutorialStepOverlay({ stepData, currentStep }) {
                         />
                     )}
 
-                    {/* Standard top arrow for desktop mode */}
                     {!isFinalStep && !isFixedUpper && !isMobileSideLeft && !isMobileDown && (
                         <div
                             style={{

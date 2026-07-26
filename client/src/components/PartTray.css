@@ -1,96 +1,132 @@
-.quantityBadge {
-  position: absolute;
-  top: -6px;
-  right: -6px;
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  background: #E53935;
-  color: white;
-  font-size: 12px;
-  font-weight: bold;
-  font-family: monospace; /* Data-driven aesthetic */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border: 2px solid #0B0B0B; /* Separation from circle */
-  box-shadow: 0 0 10px rgba(229, 57, 53, 0.8);
-  z-index: 20;
-  pointer-events: none;
-}
+@import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700&display=swap');
 
 .partTray {
   position: fixed;
   left: 0;
   bottom: 25px;
   width: 100%;
-  height: 110px;
+  height: 125px;
   display: flex;
+  justify-content: center; /* Centers the capsule horizontally on the screen */
   align-items: center;
-  pointer-events: auto;
+  pointer-events: none;
 }
 
 .carouselWindow {
-  width: 100%;
-  height: 130px;
-  overflow-x: auto;
-  overflow-y: visible;
-  -webkit-overflow-scrolling: touch;
-  scroll-behavior: smooth;
+  width: max-content;
+  height: max-content;
   background: transparent;
   border: none;
-  scrollbar-width: none;
-  /* Adds a gentle fade to the edges of the tray */
-  mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
+  pointer-events: auto;
 }
 
-.carouselWindow::-webkit-scrollbar {
-  display: none;
-}
-
+/* The capsule itself is now constrained in width and handles internal scrolling */
 .carousel {
   display: flex;
   align-items: center;
-  gap: 26px;
-  padding: 0 20px;
+  gap: 16px;
+  padding: 12px 20px;
+  max-width: 600px; /* Limits how wide the capsule can get before it starts scrolling */
   width: max-content;
   height: 100%;
-  background: transparent;
+  background: rgba(20, 24, 35, 0.75);
+  backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 50px;
+  box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.03), 0 10px 30px rgba(0, 0, 0, 0.5);
+  
+  /* Internal Scrolling */
+  overflow-x: auto;
+  overflow-y: visible !important;
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+}
+
+.carousel::-webkit-scrollbar {
+  display: none;
+}
+
+.partItemWrapper {
+  display: flex;
+  align-items: center;
+  flex: 0 0 auto; /* Prevents items from squishing */
 }
 
 .partCircle {
   position: relative;
-  width: 88px;
-  height: 88px;
+  width: 70px;
+  height: 70px;
   flex: 0 0 auto;
-  border-radius: 50%;
-  /* Glassmorphism effect */
-  background: rgba(28, 28, 28, 0.7);
-  backdrop-filter: blur(10px);
+  border-radius: 50%; /* <-- CHANGE 1: Keep it 50% here for a perfect circle */
+  background: rgba(40, 45, 60, 0.6);
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   cursor: pointer;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: inset 0 0 15px rgba(255, 255, 255, 0.05), 0 8px 25px rgba(0, 0, 0, 0.45);
-  transition: .3s;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.05);
+  
+  /* <-- CHANGE 2: Add border-radius to the transition list */
+  transition: width 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), border-radius 0.3s ease, background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+  
   -webkit-user-drag: none;
   user-select: none;
   -webkit-touch-callout: none;
-  touch-action: manipulation; /* Optimizes tap response times for touch & emulators */
-}
-.partCircle:hover {
-  transform: translateY(-10px) scale(1.12);
-  border-color: #0047AB;
-  /* Power-up glow effect */
-  box-shadow: 0 0 20px rgba(0, 71, 171, 0.6), inset 0 0 10px rgba(0, 71, 171, 0.2);
+  touch-action: manipulation;
+  z-index: 1;
+  overflow: hidden;
 }
 
+/* Hovered state morphs into a smooth capsule shape instead of an oval */
+.partCircle:hover {
+  width: 190px;
+  border-radius: 35px; /* <-- CHANGE 3: Changes it to a capsule when expanded */
+  background: rgba(30, 35, 50, 0.9);
+  border-color: #0047AB;
+  box-shadow: 0 0 15px rgba(0, 71, 171, 0.5), inset 0 0 10px rgba(0, 71, 171, 0.2);
+  z-index: 999;
+}
 .partCircle img {
-  width: 70%;
-  height: 70%;
+  width: 48px;
+  height: 48px;
+  min-width: 48px;
+  margin-left: 11px;
   object-fit: contain;
   pointer-events: none;
   -webkit-user-drag: none;
   user-select: none;
+}
+
+.partTooltip {
+  display: inline-block;
+  max-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  color: #ffffff;
+  padding-left: 0;
+  font-size: 13px;
+  font-weight: 600;
+  font-family: 'Rajdhani', sans-serif;
+  opacity: 0;
+  transition: max-width 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.2s ease, padding-left 0.3s ease;
+}
+
+.partCircle:hover .partTooltip {
+  max-width: 130px; 
+  opacity: 1;
+  padding-left: 10px;
+}
+
+.quantityBadge {
+  position: absolute;
+  top: 2px;
+  right: 4px;
+  background: #0047AB;
+  color: #fff;
+  font-size: 9px;
+  font-weight: 700;
+  padding: 2px 5px;
+  border-radius: 8px;
+  pointer-events: none;
 }

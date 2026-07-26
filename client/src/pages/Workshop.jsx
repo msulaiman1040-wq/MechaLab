@@ -1,3 +1,4 @@
+import FloatingHiddenParts from "../components/FloatingHiddenParts";
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useProgress } from "@react-three/drei";
@@ -5,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 
 import BuildManager from "../managers/BuildManager";
 import InstallManager from "../managers/InstallManager";
+import HighlightManager from "../managers/HighlightManager";
 import { useAssemblyValidation } from "../Context/AssemblyValidationContext";
 
 import MusicToggle from "../components/MusicToggle";
@@ -83,11 +85,11 @@ function Workshop() {
     // Keep highlight active from Step 2 onwards until the part is installed
     useEffect(() => {
         const checkHighlight = () => {
-            const isInstalled = InstallManager.getCount("brake-disc-caliper") > 0;
+            const isInstalled = InstallManager.getCount("brake-fl") > 0;
             if (isAssemblyTutorialActive && tutorialStep >= 2 && !isInstalled) {
-                BuildManager.setTutorialHighlight("brake-disc-caliper", true);
+                HighlightManager.highlight("brake-fl");
             } else {
-                BuildManager.setTutorialHighlight("brake-disc-caliper", false);
+                HighlightManager.clear();
             }
         };
 
@@ -100,7 +102,7 @@ function Workshop() {
     useEffect(() => {
         const unsubscribe = InstallManager.subscribe((installedParts) => {
             if (isAssemblyTutorialActive && tutorialStep === 3) {
-                if (installedParts["brake-disc-caliper"] > 0) {
+                if (installedParts["brake-fl"] > 0 || InstallManager.getCount("brake-fl") > 0) {
                     setTutorialStep(4); // Triggers Tutorial Complete overlay!
                 }
             }
@@ -153,28 +155,23 @@ function Workshop() {
         }
     };
 
-const handleLoad = (parts) => {
+    const handleLoad = (parts) => {
+        setIsGalleryOpen(false);
+        clearAssembly();
+        BuildManager.setTutorialMode(false);
+        setIsAssemblyTutorialActive(false);
+        setShowWelcomeCard(false);
 
-    setIsGalleryOpen(false);
+        // Enter build mode FIRST
+        setBuildMode(true);
 
-    clearAssembly();
+        // Wait until Workshop has rendered
+        setTimeout(() => {
+            InstallManager.loadConfiguration(parts);
+            BuildManager.loadConfiguration(parts);
+        }, 0);
+    };
 
-    BuildManager.setTutorialMode(false);
-    setIsAssemblyTutorialActive(false);
-    setShowWelcomeCard(false);
-
-    // Enter build mode FIRST
-    setBuildMode(true);
-
-    // Wait until Workshop has rendered
-    setTimeout(() => {
-
-        InstallManager.loadConfiguration(parts);
-        BuildManager.loadConfiguration(parts);
-
-    }, 0);
-
-};
     const startNewBuild = () => {
         InstallManager.reset();
         BuildManager.reset();
@@ -262,15 +259,14 @@ const handleLoad = (parts) => {
         }
     };
 
-
     return (
         <>
-        {!isFullyLoaded && (
-    <Loader
-        progress={progress}
-        status={`Loading Workshop: ${Math.floor(progress)}%`}
-    />
-)}
+            {!isFullyLoaded && (
+                <Loader
+                    progress={progress}
+                    status={`Loading Workshop: ${Math.floor(progress)}%`}
+                />
+            )}
             <WorkshopGreeting/>
             
             {/* Assembly Tutorial Welcome Overlay Card */}
@@ -291,10 +287,11 @@ const handleLoad = (parts) => {
                 />
             )}
 
-<div
-    className={`workshop ${
-        !isFullyLoaded ? "workshop-hidden" : ""
-    } ${                    isSaveModalOpen ||
+            <div
+                className={`workshop ${
+                    !isFullyLoaded ? "workshop-hidden" : ""
+                } ${
+                    isSaveModalOpen ||
                     isSettingsOpen ||
                     isGalleryOpen ||
                     (isTutorialOpen && !isSpotlightActive) ||
@@ -326,6 +323,14 @@ const handleLoad = (parts) => {
                 {buildMode && <Workbench />}
 
                 {buildMode && !isAssemblyTutorialActive && <SimulationControls />}
+                
+                {/* Floating Hidden Parts component with tutorialMode toggle connected */}
+                {buildMode && (
+                    <FloatingHiddenParts 
+                        buildMode={buildMode} 
+                        tutorialMode={isAssemblyTutorialActive} 
+                    />
+                )}
 
                 {/* Exit Tutorial Button */}
                 {isAssemblyTutorialActive && !showWelcomeCard && (
@@ -386,7 +391,6 @@ const handleLoad = (parts) => {
                         </>
                     )}
                 </AnimatePresence>
-                
             </div>
 
             <AnimatePresence>
@@ -401,7 +405,7 @@ const handleLoad = (parts) => {
                     >
                         <PartTray 
                             onPartDoubleClick={(id) => {
-                                if (isAssemblyTutorialActive && tutorialStep === 1 && id === "brake-disc-caliper") {
+                                if (isAssemblyTutorialActive && tutorialStep === 1 && id === "brake-fl") {
                                     setTutorialStep(2); // Progress to chassis step
                                 }
                             }}

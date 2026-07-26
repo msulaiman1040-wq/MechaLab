@@ -9,12 +9,28 @@ class BuildManager {
             "gear-box": 1,
             "steering-wheel": 1,
             pedals: 1,
-            "front-seat": 2,
-            "rear-seat": 1,
-            fender: 2,
             "exhaust-pipe": 1,
-            tire: 4,
-            "brake-disc-caliper": 4
+            
+            // Unique Seats
+            "left-seat": 1,
+            "right-seat": 1,
+            "rear-seat": 1,
+
+            // Unique Fenders
+            "left-fender": 1,
+            "right-fender": 1,
+
+            // Unique Wheels / Tires
+            "front-left-wheel": 1,
+            "front-right-wheel": 1,
+            "rear-right-wheel": 1,
+            "rear-left-wheel": 1,
+
+            // Unique Brakes & Calipers
+            "brake-fl": 1,
+            "brake-fr": 1,
+            "brake-rr": 1,
+            "brake-rl": 1
         };
 
         this.inventory = { ...this.initialInventory };
@@ -39,12 +55,20 @@ class BuildManager {
                 "gear-box": 0,
                 "steering-wheel": 0,
                 pedals: 0,
-                "front-seat": 0,
-                "rear-seat": 0,
-                fender: 0,
                 "exhaust-pipe": 0,
-                tire: 0,
-                "brake-disc-caliper": 1
+                "left-seat": 0,
+                "right-seat": 0,
+                "rear-seat": 0,
+                "left-fender": 0,
+                "right-fender": 0,
+                "front-left-wheel": 0,
+                "front-right-wheel": 0,
+                "rear-left-wheel": 0,
+                "rear-right-wheel": 0,
+                "brake-fl": 1,
+                "brake-fr": 0,
+                "brake-rl": 0,
+                "brake-rr": 0
             };
         } else {
             this.inventory = { ...this.initialInventory };
@@ -71,27 +95,24 @@ class BuildManager {
         
         this.reset(); 
 
-Object.entries(savedParts).forEach(([type, count]) => {
+        Object.entries(savedParts).forEach(([type, count]) => {
+            if (!this.inventory.hasOwnProperty(type))
+                return;
 
-    if (!this.inventory.hasOwnProperty(type))
-        return;
+            this.inventory[type] = Math.max(
+                0,
+                this.initialInventory[type] - count
+            );
 
-    this.inventory[type] = Math.max(
-        0,
-        this.initialInventory[type] - count
-    );
-
-    for (let i = 0; i < count; i++) {
-
-        this.installed.push({
-            id: crypto.randomUUID(),
-            type,
-            installed: true
+            for (let i = 0; i < count; i++) {
+                this.installed.push({
+                    id: crypto.randomUUID(),
+                    type,
+                    installed: true
+                });
+            }
         });
-
-    }
-
-});
+        
         console.log("4. Final installed state:", this.installed);
         this.notify();
     }

@@ -30,12 +30,29 @@ const images = {
     "gear-box": gearBox,
     "steering-wheel": steeringWheel,
     pedals,
-    "front-seat": frontSeat,
+    
+    // Unique Seats Mapping
+    "left-seat": frontSeat,
+    "right-seat": frontSeat,
     "rear-seat": rearSeat,
-    fender,
+
+    // Unique Fenders Mapping
+    "left-fender": fender,
+    "right-fender": fender,
+
     "exhaust-pipe": exhaustPipe,
-    tire,
-    "brake-disc-caliper": brakeDisc
+
+    // Unique Wheels / Tires Mapping
+    "front-left-wheel": tire,
+    "front-right-wheel": tire,
+    "rear-left-wheel": tire,
+    "rear-right-wheel": tire,
+
+    // Unique Brakes & Calipers Mapping
+    "brake-fl": brakeDisc,
+    "brake-fr": brakeDisc,
+    "brake-rl": brakeDisc,
+    "brake-rr": brakeDisc
 };
 
 export default function Workbench() {
@@ -110,17 +127,12 @@ export default function Workbench() {
             dragged.type
         );
 
-if (hit) {
-
-    InstallManager.install(dragged.type);
-
-    BuildManager.installPart(dragged.id);
-
-    playInstallSound(dragged.type);
-
-    finishInstall(dragged.type);
-
-} else {
+        if (hit) {
+            InstallManager.install(dragged.type);
+            BuildManager.installPart(dragged.id);
+            playInstallSound(dragged.type);
+            finishInstall(dragged.type);
+        } else {
             BuildManager.stopDragging(dragged.id);
         }
 
@@ -262,6 +274,7 @@ if (hit) {
                     <img
                         key={part.id}
                         src={images[part.type]}
+                        alt=""
                         draggable={false}
                         onDragStart={e => e.preventDefault()}
                         onContextMenu={e => openMenu(e, part.id, e.clientX, e.clientY)}

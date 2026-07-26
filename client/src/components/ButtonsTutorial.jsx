@@ -54,6 +54,13 @@ const buttonSteps = [
       "This is a tray that contains every component required to build the vehicle user may may scroll across the tray and choose a part then double click or double tap to bring part out of tray onto the workbench for dragging and installment and if user decides to return part to tray user should right click ortap and hold for context menu.",
     targetSelector: "#carocaro",
   },
+    {
+    title: "9. Hidden Parts",
+    description:
+      "This is the hidden parts button, when cliced it opens up a menu of uninstalled parts when the eye icon is clicked it reveals location of the part on chassis click again and it stops.",
+    targetSelector: "#HiddenPart",
+  },
+
 ];
 
 export default function ButtonsTutorial({
