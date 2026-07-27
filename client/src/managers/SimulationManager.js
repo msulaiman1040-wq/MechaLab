@@ -274,7 +274,7 @@ this.driveDirection = 1;
 
     }
 
-    //=========================================
+//=========================================
     // RETURN TO IDLE
     //=========================================
 
@@ -291,18 +291,16 @@ this.driveDirection = 1;
 
         this.targetRotationIntensity = 0;
 
-        if (this.idleAudio.paused) {
-
-            this.idleAudio.currentTime = 0;
-
-            this.idleAudio.play();
-
+        // Use activeIdle instead of undefined this.idleAudio
+        if (this.activeIdle && this.activeIdle.paused) {
+            this.activeIdle.currentTime = 0;
+            this.activeIdle.play().catch(() => {});
         }
 
         this.notify();
 
     }
-        //=========================================
+            //=========================================
     // START / STOP ENGINE
     //=========================================
 
