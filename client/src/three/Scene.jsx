@@ -1,7 +1,6 @@
-//Scene.jsx
 import VehicleAnimator from "../components/VehicleAnimator";
 import { Suspense, useRef, useEffect, useState } from "react";
-import { Canvas, useThree } from "@react-three/fiber";
+import { Canvas, useThree, useFrame } from "@react-three/fiber";
 import { OrbitControls, Environment, Stage } from "@react-three/drei";
 import * as THREE from "three";
 import Vehicle from "../components/Vehicle";
@@ -18,6 +17,17 @@ function SceneInitializer() {
         RaycasterManager.setScene(scene);
     }, [camera, scene]);
 
+    return null;
+}
+
+// Helper component to forcibly lock OrbitControls target to [0,0,0] every frame
+function ControlsLock({ controlsRef }) {
+    useFrame(() => {
+        if (controlsRef.current) {
+            controlsRef.current.target.set(0, 0, 0);
+            controlsRef.current.update();
+        }
+    });
     return null;
 }
 
@@ -85,8 +95,9 @@ export default function Scene({ buildMode, onSceneReady }) {
 
                     <OrbitControls
                         ref={controls}
-                        enableRotate
+                        enableRotate={true}
                         enablePan={false}
+                        screenSpacePanning={false}
                         rotateSpeed={2.5}
                         enableZoom={false}
                         autoRotate={!isInteracted}
@@ -99,6 +110,8 @@ export default function Scene({ buildMode, onSceneReady }) {
                             setIsInteracted(true);
                         }}
                     />
+
+                    <ControlsLock controlsRef={controls} />
                 </Canvas>
             </div>
             <ContextMenu
