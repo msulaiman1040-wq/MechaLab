@@ -318,7 +318,7 @@ function Workshop() {
 
                 {buildMode && !isAssemblyTutorialActive && <UninstallPanel />}
 
-                {/* Background Responsive Logo (Hidden in Build Mode, positioned behind vehicle/scene) */}
+                {/* Static Background Responsive Logo (Hidden in Build Mode, full color, no animation) */}
                 {!buildMode && (
                     <div 
                         style={{
@@ -332,30 +332,20 @@ function Workshop() {
                             overflow: "hidden"
                         }}
                     >
-<motion.img 
-    src={logoImg} 
-    alt="MechaLab Logo Background"
-    initial={{ opacity: 0, scale: 0.95, y: 0 }}
-    animate={{ 
-        opacity: [0.75, 0.9, 0.75], 
-        scale: [1, 1.02, 1],
-        y: [-10, 10, -10]
-    }}
-    exit={{ opacity: 0, scale: 1.05 }}
-    transition={{ 
-        opacity: { duration: 4, repeat: Infinity, ease: "easeInOut" },
-        scale: { duration: 6, repeat: Infinity, ease: "easeInOut" },
-        y: { duration: 5, repeat: Infinity, ease: "easeInOut" }
-    }}
-    style={{
-        width: "90vw",
-        maxWidth: "1400px",
-        height: "auto",
-        objectFit: "contain",
-        userSelect: "none",
-        filter: "saturate(1) contrast(1) drop-shadow(0 0 30px rgba(0, 71, 171, 0.3))",
-    }}
-/>                    </div>
+                        <img 
+                            src={logoImg} 
+                            alt="MechaLab Logo Background"
+                            style={{
+                                width: "90vw",
+                                maxWidth: "1400px",
+                                height: "auto",
+                                objectFit: "contain",
+                                userSelect: "none",
+                                opacity: 0.9,
+                                filter: "saturate(1) contrast(1)"
+                            }}
+                        />
+                    </div>
                 )}
 
                 <Scene buildMode={buildMode} />
