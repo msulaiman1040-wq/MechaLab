@@ -62,8 +62,9 @@ export default function FloatingHiddenParts({ buildMode, tutorialMode = false })
     const [uninstalledParts, setUninstalledParts] = useState([]);
     const [highlightedPartId, setHighlightedPartId] = useState(null);
 
+    // Adaptive initial position: safe on mobile and desktop viewports
     const [position, setPosition] = useState(() => ({
-        x: window.innerWidth - 1000,
+        x: Math.max(20, window.innerWidth - 80),
         y: 130
     }));
 
@@ -84,13 +85,10 @@ export default function FloatingHiddenParts({ buildMode, tutorialMode = false })
             const screenWidth = window.innerWidth;
             const screenHeight = window.innerHeight;
             
-            // Default menu width is ~230px, height max ~300px
             const menuWidth = 230;
             const menuHeight = 300;
 
-            // Check if opening to the right would overflow the screen
             const overflowsRight = position.x + 50 + menuWidth + 12 > screenWidth;
-            // Check if opening downwards would overflow the screen
             const overflowsBottom = position.y + menuHeight > screenHeight - 20;
 
             setMenuPosition({
@@ -134,8 +132,8 @@ export default function FloatingHiddenParts({ buildMode, tutorialMode = false })
     useEffect(() => {
         const onResize = () => {
             setPosition(prev => ({
-                x: Math.max(10, Math.min(window.innerWidth - 60, prev.x)),
-                y: Math.max(10, Math.min(window.innerHeight - 60, prev.y))
+                x: Math.max(10, Math.min(window.innerWidth - 70, prev.x)),
+                y: Math.max(10, Math.min(window.innerHeight - 70, prev.y))
             }));
         };
         window.addEventListener("resize", onResize);
@@ -165,8 +163,8 @@ export default function FloatingHiddenParts({ buildMode, tutorialMode = false })
         const newX = clientX - dragOffset.current.x;
         const newY = clientY - dragOffset.current.y;
 
-        const boundedX = Math.max(10, Math.min(window.innerWidth - 60, newX));
-        const boundedY = Math.max(10, Math.min(window.innerHeight - 60, newY));
+        const boundedX = Math.max(10, Math.min(window.innerWidth - 70, newX));
+        const boundedY = Math.max(10, Math.min(window.innerHeight - 70, newY));
 
         setPosition({ x: boundedX, y: boundedY });
     };
