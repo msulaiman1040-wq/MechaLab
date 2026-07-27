@@ -3,36 +3,38 @@
 .partTray {
   position: fixed;
   left: 0;
-  bottom: 25px;
+  bottom: 20px;
   width: 100%;
-  height: 125px;
   display: flex;
-  justify-content: center; /* Centers the capsule horizontally on the screen */
+  justify-content: center;
   align-items: center;
   pointer-events: none;
+  padding: 0 15px;
+  box-sizing: border-box;
+  z-index: 100;
 }
 
 .carouselWindow {
-  width: max-content;
-  height: max-content;
+  width: 100%;
+  max-width: 700px;
+  display: flex;
+  justify-content: center;
   background: transparent;
   border: none;
   pointer-events: auto;
 }
 
-/* The capsule itself is now constrained in width and handles internal scrolling */
 .carousel {
   display: flex;
   align-items: center;
-  gap: 16px;
-  padding: 12px 20px;
-  max-width: 600px; /* Limits how wide the capsule can get before it starts scrolling */
-  width: max-content;
-  height: 100%;
-  background: rgba(20, 24, 35, 0.75);
+  gap: 12px;
+  padding: 10px 16px;
+  width: 100%;
+  max-width: 100%;
+  background:transparent;
   backdrop-filter: blur(14px);
   border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 50px;
+  border-radius: 40px;
   box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.03), 0 10px 30px rgba(0, 0, 0, 0.5);
   
   /* Internal Scrolling */
@@ -50,15 +52,15 @@
 .partItemWrapper {
   display: flex;
   align-items: center;
-  flex: 0 0 auto; /* Prevents items from squishing */
+  flex: 0 0 auto;
 }
 
 .partCircle {
   position: relative;
-  width: 70px;
-  height: 70px;
+  width: 60px;
+  height: 60px;
   flex: 0 0 auto;
-  border-radius: 50%; /* <-- CHANGE 1: Keep it 50% here for a perfect circle */
+  border-radius: 50%;
   background: rgba(40, 45, 60, 0.6);
   display: flex;
   justify-content: flex-start;
@@ -67,7 +69,6 @@
   border: 1px solid rgba(255, 255, 255, 0.08);
   box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.05);
   
-  /* <-- CHANGE 2: Add border-radius to the transition list */
   transition: width 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), border-radius 0.3s ease, background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
   
   -webkit-user-drag: none;
@@ -78,20 +79,22 @@
   overflow: hidden;
 }
 
-/* Hovered state morphs into a smooth capsule shape instead of an oval */
-.partCircle:hover {
-  width: 190px;
-  border-radius: 35px; /* <-- CHANGE 3: Changes it to a capsule when expanded */
-  background: rgba(30, 35, 50, 0.9);
+/* Expanded state on hover (desktop) or active touch (mobile) */
+.partCircle:hover,
+.partCircle.active {
+  width: 170px;
+  border-radius: 30px;
+  background: rgba(30, 35, 50, 0.95);
   border-color: #0047AB;
   box-shadow: 0 0 15px rgba(0, 71, 171, 0.5), inset 0 0 10px rgba(0, 71, 171, 0.2);
   z-index: 999;
 }
+
 .partCircle img {
-  width: 48px;
-  height: 48px;
-  min-width: 48px;
-  margin-left: 11px;
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+  margin-left: 10px;
   object-fit: contain;
   pointer-events: none;
   -webkit-user-drag: none;
@@ -105,28 +108,29 @@
   white-space: nowrap;
   color: #ffffff;
   padding-left: 0;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 600;
   font-family: 'Rajdhani', sans-serif;
   opacity: 0;
   transition: max-width 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.2s ease, padding-left 0.3s ease;
 }
 
-.partCircle:hover .partTooltip {
-  max-width: 130px; 
+.partCircle:hover .partTooltip,
+.partCircle.active .partTooltip {
+  max-width: 110px; 
   opacity: 1;
-  padding-left: 10px;
+  padding-left: 8px;
 }
 
 .quantityBadge {
   position: absolute;
   top: 2px;
-  right: 4px;
+  right: 2px;
   background: #0047AB;
   color: #fff;
   font-size: 9px;
   font-weight: 700;
-  padding: 2px 5px;
-  border-radius: 8px;
+  padding: 1px 4px;
+  border-radius: 6px;
   pointer-events: none;
 }

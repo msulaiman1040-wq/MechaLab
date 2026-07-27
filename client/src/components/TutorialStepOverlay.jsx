@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 export default function TutorialStepOverlay({ stepData, currentStep }) {
-    const [coords, setCoords] = useState({ top: window.innerHeight - 200, left: window.innerWidth / 2, arrowOffset: 0, mode: "standard" });
+    const [coords, setCoords] = useState({ top: window.innerHeight - 200, left: window.innerWidth / 2, arrowOffset: 0, mode: "standard", flipVertical: false });
 
     useEffect(() => {
         const updatePosition = () => {
@@ -10,46 +10,42 @@ export default function TutorialStepOverlay({ stepData, currentStep }) {
 
             if (currentStep === 1) {
                 const targetItem = 
+                    document.querySelector('.partCircle') ||
                     document.querySelector('[data-part-id="brake-fl"]') ||
                     document.querySelector('.workbench-part') ||
-                    document.querySelector('.draggable-part') ||
-                    document.querySelector('.item-brake-fl');
+                    document.querySelector('.draggable-part');
 
                 if (targetItem) {
                     const rect = targetItem.getBoundingClientRect();
                     if (rect.width > 0 && rect.height > 0) {
-                        if (isSmallScreen) {
-                            setCoords({
-                                top: Math.min(rect.top + rect.height / 2, window.innerHeight - 150),
-                                left: rect.right + 15,
-                                arrowOffset: 0,
-                                mode: "mobile-side-left"
-                            });
-                            return;
-                        }
-
                         const targetX = rect.left + rect.width / 2;
-                        const boxWidthHalf = 170;
-                        const minBoxX = boxWidthHalf + 20;
-                        const maxBoxX = window.innerWidth - boxWidthHalf - 20;
+                        const boxWidthHalf = isSmallScreen ? 140 : 170;
+                        const minBoxX = boxWidthHalf + 10;
+                        const maxBoxX = window.innerWidth - boxWidthHalf - 10;
                         let boxX = Math.max(minBoxX, Math.min(maxBoxX, targetX));
                         let arrowShift = targetX - boxX;
 
+                        // Check if there is enough space above the element. If not, flip it below!
+                        const estimatedCardHeight = 150;
+                        const needsVerticalFlip = isSmallScreen && (rect.top - estimatedCardHeight < 60);
+
                         setCoords({
-                            top: rect.top - 15,
+                            top: needsVerticalFlip ? rect.bottom + 12 : rect.top - 12,
                             left: boxX,
                             arrowOffset: arrowShift,
-                            mode: "standard"
+                            mode: "standard",
+                            flipVertical: needsVerticalFlip
                         });
                         return;
                     }
                 }
 
                 setCoords({
-                    top: window.innerHeight * 0.55,
-                    left: isSmallScreen ? window.innerWidth / 2 : 200,
+                    top: window.innerHeight - 180,
+                    left: window.innerWidth / 2,
                     arrowOffset: 0,
-                    mode: isSmallScreen ? "fixed-upper" : "standard"
+                    mode: "standard",
+                    flipVertical: false
                 });
             } else if (currentStep === 2) {
                 const targetItem = 
@@ -71,7 +67,8 @@ export default function TutorialStepOverlay({ stepData, currentStep }) {
                             top: rect.top - 15,
                             left: boxX,
                             arrowOffset: arrowShift,
-                            mode: "standard"
+                            mode: "standard",
+                            flipVertical: false
                         });
                         return;
                     }
@@ -81,14 +78,16 @@ export default function TutorialStepOverlay({ stepData, currentStep }) {
                     top: isSmallScreen ? window.innerHeight * 0.28 : window.innerHeight * 0.35,
                     left: window.innerWidth * 0.5,
                     arrowOffset: 0,
-                    mode: isSmallScreen ? "mobile-down" : "standard"
+                    mode: isSmallScreen ? "mobile-down" : "standard",
+                    flipVertical: false
                 });
             } else if (currentStep >= 3) {
                 setCoords({
                     top: Math.max(80, window.innerHeight * 0.25),
                     left: window.innerWidth * 0.5,
                     arrowOffset: 0,
-                    mode: isSmallScreen ? "fixed-upper" : "standard"
+                    mode: isSmallScreen ? "fixed-upper" : "standard",
+                    flipVertical: false
                 });
             }
         };
@@ -105,10 +104,10 @@ export default function TutorialStepOverlay({ stepData, currentStep }) {
 
     if (!stepData || !stepData.visible) return null;
 
-    const isMobileSideLeft = coords.mode === "mobile-side-left";
     const isMobileDown = coords.mode === "mobile-down";
     const isFixedUpper = coords.mode === "fixed-upper";
     const isFinalStep = currentStep >= 3;
+    const flipVertical = coords.flipVertical;
 
     return (
         <AnimatePresence>
@@ -128,18 +127,14 @@ export default function TutorialStepOverlay({ stepData, currentStep }) {
                         position: "absolute",
                         top: `${coords.top}px`,
                         left: `${coords.left}px`,
-                        transform: isMobileSideLeft 
-                            ? "translate(0, -50%)" 
-                            : isMobileDown || isFinalStep
-                                ? "translate(-50%, 0%)" 
-                                : isFixedUpper 
-                                    ? "translate(-50%, 0%)" 
-                                    : "translate(-50%, -100%)",
+                        transform: isMobileDown || isFinalStep || isFixedUpper
+                            ? "translate(-50%, 0%)" 
+                            : flipVertical
+                                ? "translate(-50%, 0%)"
+                                : "translate(-50%, -100%)",
                         pointerEvents: "auto",
                         display: "flex",
-                        flexDirection: isMobileSideLeft 
-                            ? "row-reverse" 
-                            : "column",
+                        flexDirection: flipVertical ? "column-reverse" : "column",
                         alignItems: "center",
                         transition: "top 0.05s linear, left 0.05s linear"
                     }}
@@ -149,30 +144,30 @@ export default function TutorialStepOverlay({ stepData, currentStep }) {
                             backgroundColor: "#0b0b0b",
                             border: "2px solid #0047AB",
                             borderRadius: "10px",
-                            padding: "16px 24px",
+                            padding: "clamp(8px, 2vw, 14px) clamp(12px, 2.5vw, 20px)",
                             boxShadow: "0 0 25px rgba(0, 71, 171, 0.5)",
                             fontFamily: "'Rajdhani', sans-serif",
                             color: "#fff",
                             textAlign: "center",
-                            maxWidth: isMobileSideLeft ? "220px" : "340px",
-                            width: "calc(100vw - 60px)",
+                            maxWidth: "300px",
+                            width: "calc(100vw - 30px)",
                             boxSizing: "border-box"
                         }}
                     >
                         {stepData.title && (
                             <div style={{ 
-                                fontSize: "0.85rem", 
+                                fontSize: "clamp(0.7rem, 1.8vw, 0.8rem)", 
                                 textTransform: "uppercase", 
                                 letterSpacing: "1px", 
                                 color: "#0047AB", 
                                 fontWeight: "700", 
-                                marginBottom: "6px" 
+                                marginBottom: "3px" 
                             }}>
                                 {stepData.title}
                             </div>
                         )}
 
-                        <p style={{ fontSize: "1.05rem", lineHeight: "1.4", margin: 0, fontWeight: "600" }}>
+                        <p style={{ fontSize: "clamp(0.75rem, 2vw, 0.9rem)", lineHeight: "1.3", margin: 0, fontWeight: "600" }}>
                             {stepData.message}
                         </p>
 
@@ -180,15 +175,15 @@ export default function TutorialStepOverlay({ stepData, currentStep }) {
                             <button
                                 onClick={stepData.onDone}
                                 style={{
-                                    marginTop: "12px",
+                                    marginTop: "8px",
                                     backgroundColor: "#0047AB",
                                     color: "#fff",
                                     border: "none",
-                                    padding: "8px 20px",
+                                    padding: "5px 14px",
                                     borderRadius: "5px",
                                     fontWeight: "700",
                                     cursor: "pointer",
-                                    fontSize: "0.9rem",
+                                    fontSize: "0.8rem",
                                     boxShadow: "0 2px 8px rgba(0, 71, 171, 0.4)"
                                 }}
                             >
@@ -197,18 +192,18 @@ export default function TutorialStepOverlay({ stepData, currentStep }) {
                         )}
 
                         {stepData.showCompletionOptions && (
-                            <div style={{ display: "flex", gap: "10px", justifyContent: "center", marginTop: "14px" }}>
+                            <div style={{ display: "flex", gap: "8px", justifyContent: "center", marginTop: "10px" }}>
                                 <button
                                     onClick={stepData.onRedo}
                                     style={{
                                         backgroundColor: "transparent",
                                         color: "#fff",
                                         border: "1px solid #0047AB",
-                                        padding: "6px 14px",
+                                        padding: "4px 10px",
                                         borderRadius: "5px",
                                         fontWeight: "600",
                                         cursor: "pointer",
-                                        fontSize: "0.85rem"
+                                        fontSize: "0.8rem"
                                     }}
                                 >
                                     Redo
@@ -219,11 +214,11 @@ export default function TutorialStepOverlay({ stepData, currentStep }) {
                                         backgroundColor: "#0047AB",
                                         color: "#fff",
                                         border: "none",
-                                        padding: "6px 14px",
+                                        padding: "4px 10px",
                                         borderRadius: "5px",
                                         fontWeight: "600",
                                         cursor: "pointer",
-                                        fontSize: "0.85rem"
+                                        fontSize: "0.8rem"
                                     }}
                                 >
                                     Exit
@@ -232,41 +227,15 @@ export default function TutorialStepOverlay({ stepData, currentStep }) {
                         )}
                     </div>
 
-                    {!isFinalStep && isMobileSideLeft && (
-                        <div
-                            style={{
-                                width: 0,
-                                height: 0,
-                                borderTop: "10px solid transparent",
-                                borderBottom: "10px solid transparent",
-                                borderRight: "12px solid #0047AB",
-                                marginRight: "-1px"
-                            }}
-                        />
-                    )}
-
-                    {!isFinalStep && isMobileDown && (
+                    {!isFinalStep && (
                         <div
                             style={{
                                 width: 0,
                                 height: 0,
                                 borderLeft: "10px solid transparent",
                                 borderRight: "10px solid transparent",
-                                borderTop: "12px solid #0047AB",
-                                marginTop: "-1px"
-                            }}
-                        />
-                    )}
-
-                    {!isFinalStep && !isFixedUpper && !isMobileSideLeft && !isMobileDown && (
-                        <div
-                            style={{
-                                width: 0,
-                                height: 0,
-                                borderLeft: "10px solid transparent",
-                                borderRight: "10px solid transparent",
-                                borderTop: "12px solid #0047AB",
-                                marginTop: "-1px",
+                                [flipVertical ? "borderBottom" : "borderTop"]: "12px solid #0047AB",
+                                [flipVertical ? "marginBottom" : "marginTop"]: "-1px",
                                 transform: `translateX(${coords.arrowOffset}px)`,
                                 transition: "transform 0.05s linear"
                             }}

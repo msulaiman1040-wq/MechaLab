@@ -55,7 +55,7 @@ function Workshop() {
     useEffect(() => {
         const timer = setTimeout(() => {
             setIsMinLoadingElapsed(true);
-        }, 1500); // 1.5 seconds minimum load screen presentation
+        }, 1500);
         return () => clearTimeout(timer);
     }, []);
 
@@ -103,7 +103,7 @@ function Workshop() {
         const unsubscribe = InstallManager.subscribe((installedParts) => {
             if (isAssemblyTutorialActive && tutorialStep === 3) {
                 if (installedParts["brake-fl"] > 0 || InstallManager.getCount("brake-fl") > 0) {
-                    setTutorialStep(4); // Triggers Tutorial Complete overlay!
+                    setTutorialStep(4);
                 }
             }
         });
@@ -162,10 +162,8 @@ function Workshop() {
         setIsAssemblyTutorialActive(false);
         setShowWelcomeCard(false);
 
-        // Enter build mode FIRST
         setBuildMode(true);
 
-        // Wait until Workshop has rendered
         setTimeout(() => {
             InstallManager.loadConfiguration(parts);
             BuildManager.loadConfiguration(parts);
@@ -190,7 +188,7 @@ function Workshop() {
         setIsAssemblyTutorialActive(true);
         setBuildMode(true);
         setIsTutorialOpen(false);
-        setShowWelcomeCard(true); // Triggers the welcome modal overlay
+        setShowWelcomeCard(true);
         setTutorialStep(0);
     };
 
@@ -208,19 +206,19 @@ function Workshop() {
 
     const handleWelcomeContinue = () => {
         setShowWelcomeCard(false);
-        setTutorialStep(1); // Move to tray instruction step
+        setTutorialStep(1);
     };
 
     const handleRedoTutorial = () => {
         InstallManager.reset();
         BuildManager.reset();
-        BuildManager.setTutorialMode(true); // Ensure tray stays filtered to tutorial items
+        BuildManager.setTutorialMode(true);
         clearAssembly();
-        setTutorialStep(1); // Restart sequence from step 1
+        setTutorialStep(1);
     };
 
     const handleChassisDone = () => {
-        setTutorialStep(3); // Move to drag-and-drop workbench instruction
+        setTutorialStep(3);
     };
 
     const getTutorialStepData = () => {
@@ -229,7 +227,7 @@ function Workshop() {
                 return {
                     visible: true,
                     title: "Step 1: Select Part",
-                    message: "This is brake disc and calliper. Double click or double tap this part to bring it out of tray onto the workbench."
+                    message: "This is a brake disc and calliper. Double click or double tap this part to bring it out of tray onto the workbench."
                 };
             case 2:
                 return {
@@ -300,6 +298,7 @@ function Workshop() {
                         : ""
                 }`}
             >
+                {/* Fixed Header (No entrance animation, stays locked in position) */}
                 {!isAssemblyTutorialActive && (
                     <Header
                         buildMode={buildMode}
@@ -324,7 +323,6 @@ function Workshop() {
 
                 {buildMode && !isAssemblyTutorialActive && <SimulationControls />}
                 
-                {/* Floating Hidden Parts component with tutorialMode toggle connected */}
                 {buildMode && (
                     <FloatingHiddenParts 
                         buildMode={buildMode} 
@@ -335,51 +333,68 @@ function Workshop() {
                 {/* Exit Tutorial Button */}
                 {isAssemblyTutorialActive && !showWelcomeCard && (
                     <div style={{ position: "absolute", top: "20px", right: "30px", zIndex: 3000 }}>
-                        <button 
+                        <motion.button 
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
                             className="tutorial-btn-secondary" 
                             onClick={exitAssemblyTutorial}
                             style={{ backgroundColor: "#0b0b0b", border: "1px solid #0047AB", color: "#fff", padding: "10px 20px", borderRadius: "6px", cursor: "pointer", fontFamily: "'Rajdhani', sans-serif", fontWeight: "600" }}
                         >
                             Exit Tutorial
-                        </button>
+                        </motion.button>
                     </div>
                 )}
 
-                <AnimatePresence>
+                {/* Cinematic Button/Menu Transitions (Home screen buttons scale, blur and fade out intentionally) */}
+                <AnimatePresence mode="wait">
                     {!buildMode && (
-                        <>
-                            <motion.div
-                                className="homeScreen"
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
-                                exit={{ opacity: 0 }}
-                            >
+                        <motion.div
+                            key="home-screen"
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0, scale: 1.05, filter: "blur(8px)" }}
+                            transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+                            style={{ position: "absolute", inset: 0, pointerEvents: "none", zIndex: 1000 }}
+                        >
+                            <div className="homeScreen" style={{ pointerEvents: "auto" }}>
                                 <motion.button
                                     className="mainButton"
                                     onClick={startNewBuild}
+                                    initial={{ scale: 0.9, opacity: 0, y: 20 }}
+                                    animate={{ scale: 1, opacity: 1, y: 0 }}
+                                    exit={{ scale: 1.1, opacity: 0, y: -20 }}
+                                    transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+                                    whileHover={{ scale: 1.06, boxShadow: "0 0 25px rgba(0, 71, 171, 0.8)" }}
+                                    whileTap={{ scale: 0.95 }}
                                 >
                                     🚗 Start Building
                                 </motion.button>
-                            </motion.div>
+                            </div>
 
                             <motion.div
                                 className="secondaryButtons"
-                                initial={{ x: -50, opacity: 0 }}
+                                initial={{ x: -40, opacity: 0 }}
                                 animate={{ x: 0, opacity: 1 }}
-                                transition={{ delay: .3 }}
+                                exit={{ x: -40, opacity: 0 }}
+                                transition={{ duration: 0.35, delay: 0.05, ease: [0.22, 1, 0.36, 1] }}
+                                style={{ pointerEvents: "auto" }}
                             >
-                                <button
+                                <motion.button
                                     className="secondaryButton"
                                     onClick={() => setIsGalleryOpen(true)}
+                                    whileHover={{ scale: 1.05 }}
+                                    whileTap={{ scale: 0.95 }}
                                 >
                                     📂 Open Configuration
-                                </button>
-                                <button
+                                </motion.button>
+                                <motion.button
                                     className="secondaryButton"
                                     onClick={() => navigate("/mechapedia")}
+                                    whileHover={{ scale: 1.05 }}
+                                    whileTap={{ scale: 0.95 }}
                                 >
                                     📖 Mechapedia
-                                </button>
+                                </motion.button>
                                 
                                 <MusicToggle
                                     isPlaying={isMusicPlaying}
@@ -388,14 +403,19 @@ function Workshop() {
                                     }
                                 />
                             </motion.div>
-                        </>
+                        </motion.div>
                     )}
                 </AnimatePresence>
             </div>
 
+            {/* Part Tray smooth upward transition */}
             <AnimatePresence>
                 {buildMode && (
                     <motion.div
+                        initial={{ y: 150, opacity: 0 }}
+                        animate={{ y: 0, opacity: 1 }}
+                        exit={{ y: 150, opacity: 0 }}
+                        transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
                         style={{
                             position: "fixed",
                             bottom: 0,
@@ -406,7 +426,7 @@ function Workshop() {
                         <PartTray 
                             onPartDoubleClick={(id) => {
                                 if (isAssemblyTutorialActive && tutorialStep === 1 && id === "brake-fl") {
-                                    setTutorialStep(2); // Progress to chassis step
+                                    setTutorialStep(2);
                                 }
                             }}
                         />

@@ -421,7 +421,10 @@ console.log("Current gear =", this.currentGear);
         if (InstallManager.getCount("pedals") < 1)
             return;
 
-        if (InstallManager.getCount("tire") < 1)
+        if (InstallManager.getCount("front-left-wheel") < 1 &&
+    InstallManager.getCount("front-right-wheel") < 1 &&
+    InstallManager.getCount("rear-left-wheel") < 1 &&
+    InstallManager.getCount("rear-right-wheel") < 1)
             return;
 
         //---------------------------------
@@ -513,14 +516,20 @@ else if (this.currentGear === "R") {
         // Need brake discs
         //---------------------------------
 
-        if (InstallManager.getCount("brake-disc-caliper") < 1)
+        if (InstallManager.getCount("brake-fl") < 1 &&
+    InstallManager.getCount("brake-fr") < 1 &&
+    InstallManager.getCount("brake-rl") < 1 &&
+    InstallManager.getCount("brake-rr") < 1)
             return;
 
         //---------------------------------
         // Need at least one tire
         //---------------------------------
 
-        if (InstallManager.getCount("tire") < 1)
+        if (InstallManager.getCount("front-left-wheel") < 1 &&
+    InstallManager.getCount("front-right-wheel") < 1 &&
+    InstallManager.getCount("rear-left-wheel") < 1 &&
+    InstallManager.getCount("rear-right-wheel") < 1)
             return;
 
         //---------------------------------
@@ -702,7 +711,10 @@ shiftGear(newGear) {
         // Tires removed
         //---------------------------------
 
-        if (InstallManager.getCount("tire") < 1) {
+        if (InstallManager.getCount("front-left-wheel") < 1 &&
+    InstallManager.getCount("front-right-wheel") < 1 &&
+    InstallManager.getCount("rear-left-wheel") < 1 &&
+    InstallManager.getCount("rear-right-wheel") < 1) {
 
             this.targetRotationIntensity = 0;
 
@@ -712,7 +724,10 @@ shiftGear(newGear) {
         // Brake discs removed
         //---------------------------------
 
-        if (InstallManager.getCount("brake-disc-caliper") < 1) {
+        if (InstallManager.getCount("brake-fl") < 1 &&
+    InstallManager.getCount("brake-fr") < 1 &&
+    InstallManager.getCount("brake-rl") < 1 &&
+    InstallManager.getCount("brake-rr") < 1) {
 
             this.isBraking = false;
 

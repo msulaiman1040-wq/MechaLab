@@ -42,7 +42,7 @@ const parts = [
   { id: "front-left-wheel", name: "Front Left Wheel", image: tire },
   { id: "front-right-wheel", name: "Front Right Wheel", image: tire },
   { id: "rear-left-wheel", name: "Rear Right Wheel", image: tire },
-  { id: "rear-right-wheel", name: "Rear  Wheel", image: tire },
+  { id: "rear-right-wheel", name: "Rear Wheel", image: tire },
 
   // Unique Brakes & Calipers
   { id: "brake-fl", name: "Front-Left Brake", image: brakeDisc },
@@ -54,6 +54,7 @@ const parts = [
 export default function PartTray({ onPartDoubleClick }) {
   const [, forceUpdate] = useState(0);
   const lastTapRef = useRef({});
+  const holdTimerRef = useRef({});
 
   useEffect(() => {
     const unsubscribe = BuildManager.subscribe(() => {
@@ -101,16 +102,35 @@ export default function PartTray({ onPartDoubleClick }) {
                   e.preventDefault();
                   takePart(part.id);
                 }}
-                onTouchEnd={(e) => {
-                  e.preventDefault();
-                  handleTouchEnd(part.id);
-                }}
               >
                 <div
                   className="partCircle"
                   data-part-id={part.id}
                   draggable={false}
                   onMouseDown={(e) => e.preventDefault()}
+                  onTouchStart={(e) => {
+                    const target = e.currentTarget;
+                    // Hold for 400ms to pop open the label
+                    holdTimerRef.current[part.id] = setTimeout(() => {
+                      target.classList.add("active");
+                    }, 400);
+                  }}
+                  onTouchEnd={(e) => {
+                    clearTimeout(holdTimerRef.current[part.id]);
+                    e.currentTarget.classList.remove("active");
+                    
+                    e.preventDefault();
+                    handleTouchEnd(part.id);
+                  }}
+                  onTouchCancel={(e) => {
+                    clearTimeout(holdTimerRef.current[part.id]);
+                    e.currentTarget.classList.remove("active");
+                  }}
+                  onTouchMove={(e) => {
+                    // If user drags their finger away while holding, cancel the popup
+                    clearTimeout(holdTimerRef.current[part.id]);
+                    e.currentTarget.classList.remove("active");
+                  }}
                 >
                   <img
                     src={part.image}
