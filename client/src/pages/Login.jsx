@@ -27,8 +27,6 @@ function Login() {
         localStorage.setItem("token", token); 
         
         showNotification(data.message || "LOGIN SUCCESSFUL");
-        
-        // Redirects to Splash first instead of directly to Workshop
         navigate("/splash");
       } else {
         showNotification(data.message || "LOGIN FAILED");

@@ -23,11 +23,13 @@ export default function Loader({
                 <div className="loader-content">
 
                     <span className="loader-tag">
-                        [ MECHALAB BOOT SEQUENCE ]
+                         MECHALAB BOOT SEQUENCE 
                     </span>
 
                     <h2 className="loader-title">
-                        MechaLab
+                                  <span className="mecha">MECHA</span>
+          <span className="lab">LAB</span> 
+
                     </h2>
 
                     <p className="loader-status">

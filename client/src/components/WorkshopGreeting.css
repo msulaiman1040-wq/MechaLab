@@ -43,6 +43,9 @@
     font-weight: 600;
     word-break: break-word;
 }
+.mecha { color: #0047AB; }
+.lab { color: #FFFFFF; }
+
 
 @keyframes pulse {
     0% { transform: scale(1); opacity: 1; }

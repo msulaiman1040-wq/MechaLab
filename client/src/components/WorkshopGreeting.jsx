@@ -31,7 +31,12 @@ export default function WorkshopGreeting() {
                             HELLO
                         </div>
                         <div className="greeting-message">
-                            Welcome to MechaLab Bay. Systems online.
+                            Welcome to 
+                                                              <span className="mecha">MECHA</span>
+          <span className="lab">LAB</span> 
+
+                            Bay. 
+                            Systems online.
                         </div>
                     </div>
                 </motion.div>

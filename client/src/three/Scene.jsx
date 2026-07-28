@@ -1,5 +1,5 @@
 import VehicleAnimator from "../components/VehicleAnimator";
-import { Suspense, useRef, useEffect, useState } from "react";
+import { Suspense, useRef, useEffect, useState, useMemo } from "react";
 import { Canvas, useThree, useFrame } from "@react-three/fiber";
 import { OrbitControls, Environment, Stage } from "@react-three/drei";
 import * as THREE from "three";
@@ -35,6 +35,10 @@ export default function Scene({ buildMode, onSceneReady }) {
     const controls = useRef();
     const [isInteracted, setIsInteracted] = useState(false);
 
+    // Define initial camera position and calculate its starting distance from [0, 0, 0]
+    const initialCameraPosition = useMemo(() => new THREE.Vector3(8, 5, 8), []);
+    const initialDistance = useMemo(() => initialCameraPosition.length(), [initialCameraPosition]);
+
     const removeInstalledPart = () => {
         const mesh = VehicleContextMenuManager.mesh;
 
@@ -62,7 +66,7 @@ export default function Scene({ buildMode, onSceneReady }) {
                             onSceneReady();
                     }}
                     camera={{
-                        position: [8, 5, 8],
+                        position: [initialCameraPosition.x, initialCameraPosition.y, initialCameraPosition.z],
                         fov: 50
                     }}
                     style={{
@@ -99,12 +103,14 @@ export default function Scene({ buildMode, onSceneReady }) {
                         enablePan={false}
                         screenSpacePanning={false}
                         rotateSpeed={2.5}
-                        enableZoom={false}
+                        enableZoom={true}
+                        minDistance={2}               // Closest they can zoom in
+                        maxDistance={initialDistance} // Prevents zooming out past the starting point
                         autoRotate={!isInteracted}
                         autoRotateSpeed={1.0}
                         touches={{
                             ONE: THREE.TOUCH.ROTATE,
-                            TWO: THREE.TOUCH.NONE
+                            TWO: THREE.TOUCH.DOLLY
                         }}
                         onStart={() => {
                             setIsInteracted(true);

@@ -34,12 +34,12 @@ function App() {
           <ToastContainer />
           <BrowserRouter>
             <Routes>
-              <Route path="/" element={<Register />} />
+              <Route path="/" element={<Splash />} />
               <Route path="/register" element={<Register />} />
               <Route path="/login" element={<Login />} />
-              <Route path="/splash" element={<Splash />} />
               <Route path="/workshop" element={<Workshop />} />
-              
+              <Route path="/splash" element={<Splash />} />
+
               {/* Mechapedia Routes */}
               <Route path="/mechapedia" element={<MechapediaHome />} />
               <Route path="/mechapedia/:partId" element={<PartDetailPage />} />
