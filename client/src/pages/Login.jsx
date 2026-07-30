@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Eye, EyeOff } from "lucide-react";
 import { showNotification } from "../managers/NotificationManager";
@@ -9,9 +9,16 @@ function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    fetch("https://mechalab-backend.onrender.com/").catch(() => {});
+  }, []);
 
   async function handleLogin(e) {
     e.preventDefault();
+    setIsLoading(true);
+
     try {
       const response = await fetch("https://mechalab-backend.onrender.com/api/auth/login", {
         method: "POST",
@@ -27,12 +34,14 @@ function Login() {
         localStorage.setItem("token", token); 
         
         showNotification(data.message || "LOGIN SUCCESSFUL");
-        navigate("/splash");
+        navigate("/workshop");
       } else {
         showNotification(data.message || "LOGIN FAILED");
       }
     } catch (error) {
       showNotification("UNABLE TO CONNECT TO THE SERVER.");
+    } finally {
+      setIsLoading(false);
     }
   }
 
@@ -71,7 +80,9 @@ function Login() {
           </button>
         </div>
         
-        <button type="submit" className="submit-btn">Login</button>
+        <button type="submit" className="submit-btn" disabled={isLoading}>
+          {isLoading ? <span className="spinner"></span> : "Login"}
+        </button>
         
         <p className="redirect-text">
           Don't have an account? <Link to="/register">Register</Link>

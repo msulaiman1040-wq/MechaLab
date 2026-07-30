@@ -46,7 +46,7 @@ export default function MechapediaHome() {
             >
                 Welcome to <strong>Mechapedia</strong>, the educational knowledge base built into MechaLab.
                 <br /><br />
-                Instead of reading about vehicle components in ordinary textbooks, Mechapedia allows you to explore genuine three-dimensional automotive parts while learning how they function inside a real vehicle.
+                Instead of reading about vehicle components in ordinary textbooks, Mechapedia allows users to explore automotive components through dedicated educational pages while learning how each component functions within a vehicle.
                 <br /><br />
                 Select any component below to begin your learning journey.
             </motion.p>

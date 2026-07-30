@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Eye, EyeOff } from "lucide-react";
 import { showNotification } from "../managers/NotificationManager";
@@ -9,10 +9,42 @@ function Register() {
   const [fullName, setFullName] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
+  // Wakes up the Render backend as soon as the register page loads
+  useEffect(() => {
+    fetch("https://mechalab-backend.onrender.com/").catch(() => {});
+  }, []);
 
   async function handleRegister(e) {
     e.preventDefault();
+
+    // 1. Check if passwords match
+    if (password !== confirmPassword) {
+      showNotification("PASSWORDS DO NOT MATCH.");
+      return;
+    }
+
+    // 2. Check length (at least 6 characters)
+    if (password.length < 6) {
+      showNotification("PASSWORD MUST BE AT LEAST 6 CHARACTERS LONG.");
+      return;
+    }
+
+    // 3. Check for combination of letters, numbers, and symbols
+    const hasLetter = /[a-zA-Z]/.test(password);
+    const hasNumber = /[0-9]/.test(password);
+    const hasSymbol = /[^a-zA-Z0-9]/.test(password);
+
+    if (!hasLetter || !hasNumber || !hasSymbol) {
+      showNotification("PASSWORD MUST CONTAIN LETTERS, NUMBERS, AND SYMBOLS.");
+      return;
+    }
+
+    setIsLoading(true);
+
     try {
       const response = await fetch("https://mechalab-backend.onrender.com/api/auth/register", {
         method: "POST",
@@ -29,6 +61,8 @@ function Register() {
       }
     } catch (error) {
       showNotification("UNABLE TO CONNECT TO THE SERVER.");
+    } finally {
+      setIsLoading(false);
     }
   }
 
@@ -63,7 +97,19 @@ function Register() {
           </button>
         </div>
 
-        <button type="submit" className="submit-btn">Create Account</button>
+        <label>Confirm Password</label>
+        <div className="input-container">
+          <input 
+            type={showPassword ? "text" : "password"} 
+            value={confirmPassword} 
+            onChange={(e) => setConfirmPassword(e.target.value)} 
+            required 
+          />
+        </div>
+
+        <button type="submit" className="submit-btn" disabled={isLoading}>
+          {isLoading ? <span className="spinner"></span> : "Create Account"}
+        </button>
 
         <p className="redirect-text">
           Already have an account? <Link to="/login">Login</Link>
