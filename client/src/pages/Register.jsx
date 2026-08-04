@@ -26,7 +26,7 @@ function Register() {
 
     const interval = setInterval(async () => {
       try {
-        const response = await fetch(`https://mechalab-backend.onrender.com/api/auth/check-status?username=${username}`);
+        const response = await fetch(`https://mechalab-backend.onrender.com/api/auth/check-status?username=${encodeURIComponent(username)}`);
         const data = await response.json();
 
         if (response.ok && data.isVerified) {
@@ -35,12 +35,12 @@ function Register() {
           showNotification("EMAIL VERIFIED SUCCESSFULLY!");
           setTimeout(() => {
             navigate("/login");
-          }, 2000); // Gives user 2 seconds to view the green checkmark before redirecting
+          }, 2000); 
         }
       } catch (error) {
         // Silently retry on minor network hiccups
       }
-    }, 3000); // Check every 3 seconds
+    }, 3000);
 
     return () => clearInterval(interval);
   }, [isRegistered, username, isVerifiedAndRedirecting, navigate]);
@@ -90,7 +90,6 @@ function Register() {
     }
   }
 
-  // Waiting screen with live spinner / success state
   if (isRegistered) {
     return (
       <div className="register-container">
@@ -138,17 +137,17 @@ function Register() {
 
         <label>Full Name</label>
         <div className="input-container">
-          <input type="text" value={fullName} onChange={(e) => setFullName(e.target.value)} required />
+          <input type="text" value={fullName} onChange={(e) => setFullName(e.target.value)} autoComplete="name" required />
         </div>
 
         <label>Username</label>
         <div className="input-container">
-          <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} required />
+          <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} autoComplete="username" required />
         </div>
 
         <label>Email Address</label>
         <div className="input-container">
-          <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+          <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} autoComplete="email" required />
         </div>
 
         <label>Password</label>
@@ -157,6 +156,7 @@ function Register() {
             type={showPassword ? "text" : "password"} 
             value={password} 
             onChange={(e) => setPassword(e.target.value)} 
+            autoComplete="new-password"
             required 
           />
           <button type="button" className="toggle-password-btn" onClick={() => setShowPassword(!showPassword)}>
@@ -170,6 +170,7 @@ function Register() {
             type={showPassword ? "text" : "password"} 
             value={confirmPassword} 
             onChange={(e) => setConfirmPassword(e.target.value)} 
+            autoComplete="new-password"
             required 
           />
         </div>
