@@ -10,6 +10,9 @@ import Splash from "./pages/Splash";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Workshop from "./pages/Workshop";
+import VerifyEmail from "./pages/VerifyEmail";
+import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword";
 
 // Corrected import paths based on standard src/pages structure
 import MechapediaHome from "./pages/MechapediaHome";
@@ -39,6 +42,9 @@ function App() {
               <Route path="/login" element={<Login />} />
               <Route path="/workshop" element={<Workshop />} />
               <Route path="/splash" element={<Splash />} />
+              <Route path="/verify-email" element={<VerifyEmail />} />
+              <Route path="/forgot-password" element={<ForgotPassword />} />
+              <Route path="/reset-password" element={<ResetPassword />} />
 
               {/* Mechapedia Routes */}
               <Route path="/mechapedia" element={<MechapediaHome />} />

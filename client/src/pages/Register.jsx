@@ -8,12 +8,12 @@ function Register() {
   const navigate = useNavigate();
   const [fullName, setFullName] = useState("");
   const [username, setUsername] = useState("");
+  const [email, setEmail] = useState(""); // <-- Added email state
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  // Wakes up the Render backend as soon as the register page loads
   useEffect(() => {
     fetch("https://mechalab-backend.onrender.com/").catch(() => {});
   }, []);
@@ -21,19 +21,16 @@ function Register() {
   async function handleRegister(e) {
     e.preventDefault();
 
-    // 1. Check if passwords match
     if (password !== confirmPassword) {
       showNotification("PASSWORDS DO NOT MATCH.");
       return;
     }
 
-    // 2. Check length (at least 6 characters)
     if (password.length < 6) {
       showNotification("PASSWORD MUST BE AT LEAST 6 CHARACTERS LONG.");
       return;
     }
 
-    // 3. Check for combination of letters, numbers, and symbols
     const hasLetter = /[a-zA-Z]/.test(password);
     const hasNumber = /[0-9]/.test(password);
     const hasSymbol = /[^a-zA-Z0-9]/.test(password);
@@ -49,7 +46,7 @@ function Register() {
       const response = await fetch("https://mechalab-backend.onrender.com/api/auth/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ fullName, username, password }),
+        body: JSON.stringify({ fullName, username, email, password }), // <-- Included email
       });
 
       const data = await response.json();
@@ -82,6 +79,12 @@ function Register() {
         <label>Username</label>
         <div className="input-container">
           <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} required />
+        </div>
+
+        {/* --- Added Email Field --- */}
+        <label>Email Address</label>
+        <div className="input-container">
+          <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
         </div>
 
         <label>Password</label>

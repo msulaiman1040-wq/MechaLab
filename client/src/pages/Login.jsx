@@ -79,6 +79,12 @@ function Login() {
             {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
           </button>
         </div>
+
+        <div style={{ textAlign: "right", margin: "8px 0 15px 0" }}>
+          <Link to="/forgot-password" style={{ fontSize: "12px", color: "#0047AB", textDecoration: "none" }}>
+            Forgot Password?
+          </Link>
+        </div>
         
         <button type="submit" className="submit-btn" disabled={isLoading}>
           {isLoading ? <span className="spinner"></span> : "Login"}
