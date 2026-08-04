@@ -9,12 +9,15 @@ const registerUser = async (req, res) => {
   try {
     const { fullName, email, username, password } = req.body;
 
-    const existingUser = await User.findOne({ $or: [{ username }, { email }] });
+    // Precise checks so you know exactly which field failed
+    const existingUsername = await User.findOne({ username });
+    if (existingUsername) {
+      return res.status(400).json({ message: "Username already exists" });
+    }
 
-    if (existingUser) {
-      return res.status(400).json({
-        message: "Username or email already exists",
-      });
+    const existingEmail = await User.findOne({ email });
+    if (existingEmail) {
+      return res.status(400).json({ message: "Email already exists" });
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -28,13 +31,17 @@ const registerUser = async (req, res) => {
       username,
       password: hashedPassword,
       verificationToken,
-      isVerified: false,
+      emailVerified: false, // Matches userSchema field name exactly
     });
 
     await user.save();
 
-    // Send email verification via Resend
-    await sendVerificationEmail(email, verificationToken);
+    // Send email verification
+    try {
+      await sendVerificationEmail(email, verificationToken);
+    } catch (emailError) {
+      console.error("Failed to send verification email:", emailError.message);
+    }
 
     res.status(201).json({
       message: "Registration successful! Please check your email to verify your account.",
@@ -56,7 +63,7 @@ const verifyEmail = async (req, res) => {
       return res.status(400).json({ message: "Invalid or expired verification token" });
     }
 
-    user.isVerified = true;
+    user.emailVerified = true; // Matches schema
     user.verificationToken = undefined;
     await user.save();
 
@@ -79,8 +86,8 @@ const loginUser = async (req, res) => {
       });
     }
 
-    // Check if email is verified before allowing login
-    if (!user.isVerified) {
+    // Check if email is verified before allowing login (matches schema)
+    if (!user.emailVerified) {
       return res.status(400).json({
         message: "Please verify your email before logging in. Check your inbox for the verification link.",
       });
@@ -174,7 +181,7 @@ const checkStatus = async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
 
-    return res.status(200).json({ isVerified: user.isVerified });
+    return res.status(200).json({ isVerified: user.emailVerified });
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
