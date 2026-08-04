@@ -1,37 +1,68 @@
 const User = require("../models/User");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const crypto = require("crypto");
+const { sendVerificationEmail, sendPasswordResetEmail } = require("../utils/email");
 
 // Register
 const registerUser = async (req, res) => {
   try {
-    const { fullName, username, password } = req.body;
+    const { fullName, email, username, password } = req.body;
 
-    const existingUser = await User.findOne({ username });
+    const existingUser = await User.findOne({ $or: [{ username }, { email }] });
 
     if (existingUser) {
       return res.status(400).json({
-        message: "Username already exists",
+        message: "Username or email already exists",
       });
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
+    
+    // Generate email verification token
+    const verificationToken = crypto.randomBytes(32).toString("hex");
 
     const user = new User({
       fullName,
+      email,
       username,
       password: hashedPassword,
+      verificationToken,
+      isVerified: false,
     });
 
     await user.save();
 
+    // Send email verification via Resend
+    await sendVerificationEmail(email, verificationToken);
+
     res.status(201).json({
-      message: `Welcome ${fullName}!`,
+      message: "Registration successful! Please check your email to verify your account.",
     });
   } catch (error) {
     res.status(500).json({
       message: error.message,
     });
+  }
+};
+
+// Verify Email
+const verifyEmail = async (req, res) => {
+  try {
+    const { token } = req.query;
+    const user = await User.findOne({ verificationToken: token });
+
+    if (!user) {
+      return res.status(400).json({ message: "Invalid or expired verification token" });
+    }
+
+    user.isVerified = true;
+    user.verificationToken = undefined;
+    await user.save();
+
+    res.status(200).json({ message: "Email verified successfully!" });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
   }
 };
 
@@ -57,7 +88,6 @@ const loginUser = async (req, res) => {
     }
 
     // Generate Token
-    // Removed { expiresIn: "1h" } to prevent token expiration
     const token = jwt.sign(
       { user: { id: user._id } },
       process.env.JWT_SECRET
@@ -76,7 +106,58 @@ const loginUser = async (req, res) => {
   }
 };
 
+// Forgot Password
+const forgotPassword = async (req, res) => {
+  try {
+    const { email } = req.body;
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res.status(404).json({ message: "User with this email does not exist" });
+    }
+
+    const resetToken = crypto.randomBytes(32).toString("hex");
+    user.resetPasswordToken = resetToken;
+    user.resetPasswordExpires = Date.now() + 3600000; // 1 hour
+    await user.save();
+
+    await sendPasswordResetEmail(email, resetToken);
+
+    res.status(200).json({ message: "Password reset link sent to your email" });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// Reset Password
+const resetPassword = async (req, res) => {
+  try {
+    const { token, newPassword } = req.body;
+
+    const user = await User.findOne({
+      resetPasswordToken: token,
+      resetPasswordExpires: { $gt: Date.now() },
+    });
+
+    if (!user) {
+      return res.status(400).json({ message: "Password reset token is invalid or has expired" });
+    }
+
+    user.password = await bcrypt.hash(newPassword, 10);
+    user.resetPasswordToken = undefined;
+    user.resetPasswordExpires = undefined;
+    await user.save();
+
+    res.status(200).json({ message: "Password has been reset successfully" });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 module.exports = {
   registerUser,
+  verifyEmail,
   loginUser,
+  forgotPassword,
+  resetPassword,
 };
