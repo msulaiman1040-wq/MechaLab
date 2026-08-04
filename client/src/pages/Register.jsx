@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff, CheckCircle2 } from "lucide-react";
 import { showNotification } from "../managers/NotificationManager";
 import "./Register.css";
 
@@ -13,11 +13,37 @@ function Register() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [isRegistered, setIsRegistered] = useState(false); // <-- Tracks if registration was successful
+  const [isRegistered, setIsRegistered] = useState(false);
+  const [isVerifiedAndRedirecting, setIsVerifiedAndRedirecting] = useState(false);
 
   useEffect(() => {
     fetch("https://mechalab-backend.onrender.com/").catch(() => {});
   }, []);
+
+  // Live polling effect to detect when the user verifies their email in another tab/window
+  useEffect(() => {
+    if (!isRegistered || !username || isVerifiedAndRedirecting) return;
+
+    const interval = setInterval(async () => {
+      try {
+        const response = await fetch(`https://mechalab-backend.onrender.com/api/auth/check-status?username=${username}`);
+        const data = await response.json();
+
+        if (response.ok && data.isVerified) {
+          clearInterval(interval);
+          setIsVerifiedAndRedirecting(true);
+          showNotification("EMAIL VERIFIED SUCCESSFULLY!");
+          setTimeout(() => {
+            navigate("/login");
+          }, 2000); // Gives user 2 seconds to view the green checkmark before redirecting
+        }
+      } catch (error) {
+        // Silently retry on minor network hiccups
+      }
+    }, 3000); // Check every 3 seconds
+
+    return () => clearInterval(interval);
+  }, [isRegistered, username, isVerifiedAndRedirecting, navigate]);
 
   async function handleRegister(e) {
     e.preventDefault();
@@ -53,7 +79,7 @@ function Register() {
       const data = await response.json();
       if (response.ok) {
         showNotification(data.message || "REGISTRATION SUCCESSFUL");
-        setIsRegistered(true); // <-- Switch view to pending verification notice
+        setIsRegistered(true);
       } else {
         showNotification(data.message || "REGISTRATION FAILED");
       }
@@ -64,7 +90,7 @@ function Register() {
     }
   }
 
-  // If registered successfully, show the verification waiting screen instead of the form
+  // Waiting screen with live spinner / success state
   if (isRegistered) {
     return (
       <div className="register-container">
@@ -73,13 +99,30 @@ function Register() {
             <span className="mecha">Mecha</span>
             <span className="lab">Lab</span> Verification
           </h1>
-          <p style={{ margin: "20px 0", color: "#ccc", lineHeight: "1.6" }}>
-            Registration successful! We have sent a verification link to <strong style={{ color: "#fff" }}>{email}</strong>. 
-            Please check your inbox and click the link to activate your account before logging in.
-          </p>
-          <Link to="/login" style={{ color: "#0047AB", textDecoration: "none", fontWeight: "bold", display: "inline-block", marginTop: "15px" }}>
-            Proceed to Login
-          </Link>
+
+          <div style={{ margin: "40px 0" }}>
+            {isVerifiedAndRedirecting ? (
+              <div>
+                <CheckCircle2 size={56} color="#00ff66" style={{ margin: "0 auto 20px auto", animation: "popIn 0.3s ease-in-out" }} />
+                <p style={{ color: "#00ff66", fontWeight: "bold", fontSize: "16px" }}>
+                  Email Verified Successfully!
+                </p>
+                <p style={{ color: "#ccc", fontSize: "13px", marginTop: "8px" }}>
+                  Redirecting you to login...
+                </p>
+              </div>
+            ) : (
+              <div>
+                <div className="spinner" style={{ width: "45px", height: "45px", borderWidth: "4px", margin: "0 auto 20px auto" }}></div>
+                <p style={{ color: "#ccc", lineHeight: "1.6" }}>
+                  We sent a verification link to <strong style={{ color: "#fff" }}>{email}</strong>.
+                </p>
+                <p style={{ color: "#888", fontSize: "13px", marginTop: "12px" }}>
+                  Waiting for verification... This screen will automatically log you through once confirmed.
+                </p>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     );
