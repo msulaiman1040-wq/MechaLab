@@ -79,6 +79,13 @@ const loginUser = async (req, res) => {
       });
     }
 
+    // Check if email is verified before allowing login
+    if (!user.isVerified) {
+      return res.status(400).json({
+        message: "Please verify your email before logging in. Check your inbox for the verification link.",
+      });
+    }
+
     const match = await bcrypt.compare(password, user.password);
 
     if (!match) {
@@ -154,10 +161,30 @@ const resetPassword = async (req, res) => {
   }
 };
 
+// Check Status (For Frontend Polling)
+const checkStatus = async (req, res) => {
+  try {
+    const { username } = req.query;
+    if (!username) {
+      return res.status(400).json({ message: "Username is required" });
+    }
+
+    const user = await User.findOne({ username });
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    return res.status(200).json({ isVerified: user.isVerified });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
 module.exports = {
   registerUser,
   verifyEmail,
   loginUser,
   forgotPassword,
   resetPassword,
+  checkStatus,
 };
