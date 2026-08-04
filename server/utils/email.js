@@ -3,11 +3,14 @@ const nodemailer = require("nodemailer");
 const transporter = nodemailer.createTransport({
   host: "smtp.gmail.com",
   port: 465,
-  secure: true, // true for 465, false for other ports
+  secure: true,
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS,
   },
+  connectionTimeout: 5000, // Fail if connection takes longer than 5 seconds
+  greetingTimeout: 5000,
+  socketTimeout: 5000,
 });
 
 const sendVerificationEmail = async (email, token) => {
@@ -28,8 +31,8 @@ const sendVerificationEmail = async (email, token) => {
       `,
     });
   } catch (error) {
-    console.error("Nodemailer Error Details:", error);
-    throw new Error("Email could not be sent.");
+    console.error("Nodemailer Timeout/Error Details:", error.message);
+    throw new Error("Email could not be sent due to a server connection timeout.");
   }
 };
 
@@ -51,7 +54,7 @@ const sendPasswordResetEmail = async (email, token) => {
       `,
     });
   } catch (error) {
-    console.error("Nodemailer Error Details:", error);
+    console.error("Nodemailer Timeout/Error Details:", error.message);
     throw new Error("Password reset email could not be sent.");
   }
 };
