@@ -8,11 +8,12 @@ function Register() {
   const navigate = useNavigate();
   const [fullName, setFullName] = useState("");
   const [username, setUsername] = useState("");
-  const [email, setEmail] = useState(""); // <-- Added email state
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [isRegistered, setIsRegistered] = useState(false); // <-- Tracks if registration was successful
 
   useEffect(() => {
     fetch("https://mechalab-backend.onrender.com/").catch(() => {});
@@ -46,13 +47,13 @@ function Register() {
       const response = await fetch("https://mechalab-backend.onrender.com/api/auth/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ fullName, username, email, password }), // <-- Included email
+        body: JSON.stringify({ fullName, username, email, password }),
       });
 
       const data = await response.json();
       if (response.ok) {
         showNotification(data.message || "REGISTRATION SUCCESSFUL");
-        navigate("/login");
+        setIsRegistered(true); // <-- Switch view to pending verification notice
       } else {
         showNotification(data.message || "REGISTRATION FAILED");
       }
@@ -61,6 +62,27 @@ function Register() {
     } finally {
       setIsLoading(false);
     }
+  }
+
+  // If registered successfully, show the verification waiting screen instead of the form
+  if (isRegistered) {
+    return (
+      <div className="register-container">
+        <div className="register-form" style={{ textAlign: "center" }}>
+          <h1 className="logo-title">
+            <span className="mecha">Mecha</span>
+            <span className="lab">Lab</span> Verification
+          </h1>
+          <p style={{ margin: "20px 0", color: "#ccc", lineHeight: "1.6" }}>
+            Registration successful! We have sent a verification link to <strong style={{ color: "#fff" }}>{email}</strong>. 
+            Please check your inbox and click the link to activate your account before logging in.
+          </p>
+          <Link to="/login" style={{ color: "#0047AB", textDecoration: "none", fontWeight: "bold", display: "inline-block", marginTop: "15px" }}>
+            Proceed to Login
+          </Link>
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -81,7 +103,6 @@ function Register() {
           <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} required />
         </div>
 
-        {/* --- Added Email Field --- */}
         <label>Email Address</label>
         <div className="input-container">
           <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
