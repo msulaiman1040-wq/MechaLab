@@ -19,7 +19,6 @@ function Register() {
   const [isVerifiedAndRedirecting, setIsVerifiedAndRedirecting] =
     useState(false);
 
-  // Controls resend button
   const [isResending, setIsResending] = useState(false);
 
   // Wake up Render backend
@@ -55,7 +54,7 @@ function Register() {
           }, 2000);
         }
       } catch (error) {
-        // Silently retry on network errors
+        // Silently retry
       }
     }, 3000);
 
@@ -85,7 +84,7 @@ function Register() {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            email: email,
+            email,
           }),
         }
       );
@@ -103,10 +102,7 @@ function Register() {
         );
       }
     } catch (error) {
-      console.error(
-        "Resend verification error:",
-        error
-      );
+      console.error("Resend verification error:", error);
 
       showNotification(
         "UNABLE TO CONNECT TO THE SERVER."
@@ -120,13 +116,11 @@ function Register() {
   async function handleRegister(e) {
     e.preventDefault();
 
-    // Check password match
     if (password !== confirmPassword) {
       showNotification("PASSWORDS DO NOT MATCH.");
       return;
     }
 
-    // Minimum password length
     if (password.length < 6) {
       showNotification(
         "PASSWORD MUST BE AT LEAST 6 CHARACTERS LONG."
@@ -134,7 +128,6 @@ function Register() {
       return;
     }
 
-    // Password requirements
     const hasLetter = /[a-zA-Z]/.test(password);
     const hasNumber = /[0-9]/.test(password);
     const hasSymbol = /[^a-zA-Z0-9]/.test(password);
@@ -179,10 +172,7 @@ function Register() {
         );
       }
     } catch (error) {
-      console.error(
-        "Registration error:",
-        error
-      );
+      console.error("Registration error:", error);
 
       showNotification(
         "UNABLE TO CONNECT TO THE SERVER."
@@ -193,7 +183,7 @@ function Register() {
   }
 
   // =========================================================
-  // EMAIL VERIFICATION WAITING SCREEN
+  // EMAIL VERIFICATION SCREEN
   // =========================================================
   if (isRegistered) {
     return (
@@ -202,12 +192,19 @@ function Register() {
           className="register-form"
           style={{ textAlign: "center" }}
         >
-          <h1>Mecha</h1>
-          <h2>Lab Verification</h2>
+
+          {/* MechaLab Logo Title */}
+          <h1 className="logo-title">
+            <span className="mecha">Mecha</span>
+            <span className="lab">Lab</span>
+          </h1>
+
+          <h2>Verification</h2>
 
           <div style={{ margin: "40px 0" }}>
             {isVerifiedAndRedirecting ? (
               <div>
+
                 <CheckCircle2
                   size={56}
                   color="#00ff66"
@@ -237,9 +234,11 @@ function Register() {
                 >
                   Redirecting you to login...
                 </p>
+
               </div>
             ) : (
               <div>
+
                 <div
                   className="spinner"
                   style={{
@@ -275,7 +274,6 @@ function Register() {
                   once your email is confirmed.
                 </p>
 
-                {/* Resend verification button */}
                 <button
                   type="button"
                   className="submit-btn"
@@ -300,6 +298,7 @@ function Register() {
                   Didn't receive the email? Check your
                   spam folder or resend it.
                 </p>
+
               </div>
             )}
           </div>
@@ -314,10 +313,17 @@ function Register() {
   return (
     <div className="register-container">
       <div className="register-form">
-        <h1>Mecha</h1>
-        <h2>Lab Register</h2>
+
+        {/* MechaLab Logo Title */}
+        <h1 className="logo-title">
+          <span className="mecha">Mecha</span>
+          <span className="lab">Lab</span>
+        </h1>
+
+        <h2>Register</h2>
 
         <form onSubmit={handleRegister}>
+
           <label>Full Name</label>
 
           <div className="input-container">
@@ -365,7 +371,9 @@ function Register() {
           <div className="password-wrapper">
             <input
               type={
-                showPassword ? "text" : "password"
+                showPassword
+                  ? "text"
+                  : "password"
               }
               value={password}
               onChange={(e) =>
@@ -395,7 +403,9 @@ function Register() {
           <div className="input-container">
             <input
               type={
-                showPassword ? "text" : "password"
+                showPassword
+                  ? "text"
+                  : "password"
               }
               value={confirmPassword}
               onChange={(e) =>
@@ -420,8 +430,11 @@ function Register() {
 
           <p className="redirect-text">
             Already have an account?{" "}
-            <Link to="/login">Login</Link>
+            <Link to="/login">
+              Login
+            </Link>
           </p>
+
         </form>
       </div>
     </div>
