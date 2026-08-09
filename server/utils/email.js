@@ -1,5 +1,5 @@
 const sendVerificationEmail = async (email, token) => {
-  const verifyLink = `${process.env.CLIENT_URL || 'http://localhost:3000'}/verify-email?token=${token}`;
+  const verifyLink = `${process.env.CLIENT_URL || 'https://mecha-lab-five.vercel.app'}/verify-email?token=${token}`;
   
   console.log("=== BREVO EMAIL DEBUG ===");
   console.log("API Key exists:", !!process.env.BREVO_API_KEY);
@@ -43,7 +43,7 @@ const sendVerificationEmail = async (email, token) => {
 };
 
 const sendPasswordResetEmail = async (email, token) => {
-  const resetLink = `${process.env.CLIENT_URL || 'http://localhost:3000'}/reset-password?token=${token}`;
+  const resetLink = `${process.env.CLIENT_URL || 'https://mecha-lab-five.vercel.app'}/reset-password?token=${token}`;
   
   try {
     const response = await fetch("https://api.brevo.com/v3/smtp/email", {
