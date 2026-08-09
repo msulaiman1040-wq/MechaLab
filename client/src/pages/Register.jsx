@@ -19,16 +19,19 @@ function Register() {
   const [isVerifiedAndRedirecting, setIsVerifiedAndRedirecting] =
     useState(false);
 
-  // NEW: controls resend button
+  // Controls resend button
   const [isResending, setIsResending] = useState(false);
 
+  // Wake up Render backend
   useEffect(() => {
     fetch("https://mechalab-backend.onrender.com/").catch(() => {});
   }, []);
 
-  // Live polling effect to detect when the user verifies their email
+  // Check verification status every 3 seconds
   useEffect(() => {
-    if (!isRegistered || !username || isVerifiedAndRedirecting) return;
+    if (!isRegistered || !username || isVerifiedAndRedirecting) {
+      return;
+    }
 
     const interval = setInterval(async () => {
       try {
@@ -52,7 +55,7 @@ function Register() {
           }, 2000);
         }
       } catch (error) {
-        // Silently retry on minor network errors
+        // Silently retry on network errors
       }
     }, 3000);
 
@@ -64,7 +67,7 @@ function Register() {
     navigate,
   ]);
 
-  // NEW: Resend verification email
+  // Resend verification email
   async function handleResendVerification() {
     if (!email) {
       showNotification("EMAIL ADDRESS IS MISSING.");
@@ -82,7 +85,7 @@ function Register() {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            email,
+            email: email,
           }),
         }
       );
@@ -113,14 +116,17 @@ function Register() {
     }
   }
 
+  // Register user
   async function handleRegister(e) {
     e.preventDefault();
 
+    // Check password match
     if (password !== confirmPassword) {
       showNotification("PASSWORDS DO NOT MATCH.");
       return;
     }
 
+    // Minimum password length
     if (password.length < 6) {
       showNotification(
         "PASSWORD MUST BE AT LEAST 6 CHARACTERS LONG."
@@ -128,6 +134,7 @@ function Register() {
       return;
     }
 
+    // Password requirements
     const hasLetter = /[a-zA-Z]/.test(password);
     const hasNumber = /[0-9]/.test(password);
     const hasSymbol = /[^a-zA-Z0-9]/.test(password);
@@ -172,6 +179,8 @@ function Register() {
         );
       }
     } catch (error) {
+      console.error("Registration error:", error);
+
       showNotification(
         "UNABLE TO CONNECT TO THE SERVER."
       );
@@ -255,12 +264,12 @@ function Register() {
                   marginTop: "12px",
                 }}
               >
-                Waiting for verification... This screen
-                will automatically log you through once
-                confirmed.
+                Waiting for verification... This
+                screen will automatically redirect you
+                once your email is confirmed.
               </p>
 
-              {/* NEW RESEND BUTTON */}
+              {/* Resend verification button */}
               <button
                 type="button"
                 className="submit-btn"
@@ -292,6 +301,7 @@ function Register() {
     );
   }
 
+  // Registration form
   return (
     <div className="register-form">
       <h1>Mecha</h1>
