@@ -16,7 +16,9 @@ function Login() {
     e.preventDefault();
 
     if (!username.trim() || !password) {
-      showNotification("PLEASE ENTER YOUR USERNAME AND PASSWORD.");
+      showNotification(
+        "PLEASE ENTER YOUR USERNAME AND PASSWORD."
+      );
       return;
     }
 
@@ -41,8 +43,15 @@ function Login() {
 
       if (response.ok) {
         // Save user information
-        localStorage.setItem("fullName", data.fullName || "");
-        localStorage.setItem("username", data.username || "");
+        localStorage.setItem(
+          "fullName",
+          data.fullName || ""
+        );
+
+        localStorage.setItem(
+          "username",
+          data.username || ""
+        );
 
         // Save JWT token
         if (data.token) {
