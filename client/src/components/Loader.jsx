@@ -20,7 +20,7 @@ export default function Loader({
 
                     <h2 className="loader-title">
                         <span className="mecha">MECHA</span>
-                        <span className="lab">LAB</span> 
+                        <span className="laaab">LAB</span> 
                     </h2>
 
                     <p className="loader-status">
