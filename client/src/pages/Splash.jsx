@@ -31,11 +31,11 @@ function Splash() {
           </p>
         </div>
 
-        {/* Replaced loading bar with action buttons */}
+        {/* Action buttons */}
         <div className="splash-action-container">
           <motion.button
             className="splash-primary-btn"
-            whileHover={{ scale: 1.05, boxShadow: "0 0 20px rgba(0, 71, 171, 0.5)" }}
+            whileHover={{ scale: 1.05, boxShadow: "0 10px 20px -5px rgba(0, 71, 171, 0.3)" }}
             whileTap={{ scale: 0.95 }}
             onClick={() => navigate("/register")}
           >

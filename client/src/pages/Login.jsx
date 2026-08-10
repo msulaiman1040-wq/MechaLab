@@ -50,38 +50,48 @@ function Login() {
       <form className="login-form" onSubmit={handleLogin}>
         <h1 className="logo-title">
           <span className="mecha">Mecha</span>
-          <span className="lab">Lab</span> Login
+          <span className="lab">Lab</span>
         </h1>
+        <p className="login-subtitle">Sign in to your account</p>
         
-        <label>Username</label>
-        <div className="input-container">
-          <input 
-            type="text" 
-            value={username} 
-            onChange={(e) => setUsername(e.target.value)} 
-            required 
-          />
+        <div className="input-group">
+          <label>Username</label>
+          <div className="input-container">
+            <input 
+              type="text" 
+              value={username} 
+              onChange={(e) => setUsername(e.target.value)} 
+              placeholder="Enter your username"
+              autoComplete="username"
+              required 
+            />
+          </div>
         </div>
         
-        <label>Password</label>
-        <div className="password-wrapper">
-          <input 
-            type={showPassword ? "text" : "password"} 
-            value={password} 
-            onChange={(e) => setPassword(e.target.value)} 
-            required 
-          />
-          <button
-            type="button"
-            className="toggle-password-btn"
-            onClick={() => setShowPassword(!showPassword)}
-          >
-            {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-          </button>
+        <div className="input-group">
+          <label>Password</label>
+          <div className="password-wrapper">
+            <input 
+              type={showPassword ? "text" : "password"} 
+              value={password} 
+              onChange={(e) => setPassword(e.target.value)} 
+              placeholder="Enter your password"
+              autoComplete="current-password"
+              required 
+            />
+            <button
+              type="button"
+              className="toggle-password-btn"
+              onClick={() => setShowPassword(!showPassword)}
+              aria-label="Toggle password visibility"
+            >
+              {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+            </button>
+          </div>
         </div>
 
-        <div style={{ textAlign: "right", margin: "8px 0 15px 0" }}>
-          <Link to="/forgot-password" style={{ fontSize: "12px", color: "#0047AB", textDecoration: "none" }}>
+        <div className="forgot-password-container">
+          <Link to="/forgot-password">
             Forgot Password?
           </Link>
         </div>

@@ -12,7 +12,7 @@ body,
     position: relative;
     width: 100vw;
     height: 100vh;
-    background: radial-gradient(circle at center, #0a1128 0%, #030303 70%);
+    background-color: #f8fafc; /* Crisp off-white light theme background */
     overflow: hidden;
     padding-top: clamp(70px, 10vh, 90px);
     box-sizing: border-box;
@@ -48,22 +48,22 @@ body,
 /* START / MAIN BUTTON */
 .mainButton {
     padding: clamp(12px, 2vh, 18px) clamp(24px, 5vw, 42px);
-    background: none;
+    background: #0047AB;
     color: white;
     font-size: clamp(16px, 2vw, 19px);
     font-weight: 700;
-    border: 2px solid #0047AB;
-    border-radius: 14px;
+    border: none;
+    border-radius: 12px;
     cursor: pointer;
     transition: .3s;
     font-family: 'Rajdhani', sans-serif;
     width: 100%;
     text-align: center;
-    box-shadow: 0 0 15px rgba(0, 71, 171, 0.3);
+    box-shadow: 0 4px 6px -1px rgba(0, 71, 171, 0.2);
 }
 
 .mainButton:hover {
-    background: #000000;
+    background: #003380;
     transform: translateY(-2px);
 }
 
@@ -81,11 +81,11 @@ body,
 
 .secondaryButton {
     padding: clamp(10px, 1.5vh, 13px) clamp(14px, 2vw, 22px);
-    background: rgba(0, 0, 0, 0.85);
+    background: #ffffff;
     backdrop-filter: blur(8px);
-    border: 2px solid #0047AB;
+    border: 1px solid #cbd5e1;
     border-radius: 10px;
-    color: white;
+    color: #334155;
     cursor: pointer;
     transition: .25s;
     font-size: clamp(13px, 1.5vw, 15px);
@@ -97,10 +97,13 @@ body,
     display: flex;
     align-items: center;
     gap: 8px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
 }
 
 .secondaryButton:hover {
-    background: #000000;
+    background: #f1f5f9;
+    border-color: #0047AB;
+    color: #0047AB;
     transform: translateY(-2px);
 }
 
@@ -111,7 +114,7 @@ body,
     left: 0;
     width: 100vw;
     height: 100vh;
-    background: rgba(0, 0, 0, 0.85);
+    background: rgba(15, 23, 42, 0.6);
     backdrop-filter: blur(5px);
     display: flex;
     justify-content: center;
@@ -122,26 +125,26 @@ body,
 }
 
 .modalContent, .galleryContent {
-    background: #171717;
+    background: #ffffff;
     padding: clamp(20px, 4vw, 40px);
     border-radius: 16px;
-    color: white;
+    color: #0f172a;
     width: 100%;
     max-width: 420px;
     text-align: center;
-    border: 1px solid #333;
+    border: 1px solid #e2e8f0;
     box-sizing: border-box;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
 }
 
 .modalContent input {
     width: 100%;
     padding: 12px;
     margin: 15px 0;
-    background: #0B0B0B;
-    border: 1px solid #444;
-    color: white;
-    border-radius: 6px;
+    background: #f8fafc;
+    border: 1px solid #cbd5e1;
+    color: #0f172a;
+    border-radius: 8px;
     box-sizing: border-box;
     font-family: 'Rajdhani', sans-serif;
     font-size: 15px;
@@ -149,15 +152,15 @@ body,
 
 .emptyState {
     padding: 30px;
-    color: #888;
+    color: #64748b;
     font-size: 14px;
 }
 
 .closeGallery {
     margin-top: 20px;
     padding: 10px 20px;
-    background: #333;
-    color: white;
+    background: #e2e8f0;
+    color: #334155;
     border: none;
     border-radius: 8px;
     cursor: pointer;
@@ -166,7 +169,7 @@ body,
 }
 
 .closeGallery:hover {
-    background: #444;
+    background: #cbd5e1;
 }
 
 /* GALLERY LIST STYLES */
@@ -180,7 +183,8 @@ body,
 }
 
 .configCard {
-    background: #222;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
     padding: 12px;
     border-radius: 8px;
     display: flex;
@@ -190,11 +194,11 @@ body,
 }
 
 .deleteBtn {
-    background: #8b0000;
-    color: white;
-    border: none;
+    background: #ffeeef;
+    color: #dc2626;
+    border: 1px solid #fca5a5;
     padding: 6px 12px;
-    border-radius: 4px;
+    border-radius: 6px;
     cursor: pointer;
     font-size: 12px;
     font-family: 'Rajdhani', sans-serif;
@@ -202,7 +206,7 @@ body,
 }
 
 .deleteBtn:hover {
-    background: #ff0000;
+    background: #fee2e2;
 }
 
 /* DISABLED STATE */
@@ -212,7 +216,7 @@ body,
     filter: blur(2px);
 }
 
-/* MOBILE RESPONSIVE FIX FOR SECONDARY BUTTONS (FLUID SIZING & AUTO ICONS) */
+/* MOBILE RESPONSIVE FIX */
 @media (max-width: 768px) {
     .secondaryButtons {
         top: 130px;
@@ -226,7 +230,6 @@ body,
         font-size: clamp(10px, 3.2vw, 12px);
     }
 
-    /* Auto scale any embedded icons inside the secondary buttons */
     .secondaryButton svg,
     .secondaryButton i {
         font-size: clamp(11px, 3.5vw, 14px);
@@ -234,7 +237,8 @@ body,
         height: auto;
     }
 }
-.workshop-hidden{
-    opacity:0;
-    pointer-events:none;
+
+.workshop-hidden {
+    opacity: 0;
+    pointer-events: none;
 }

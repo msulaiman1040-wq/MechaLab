@@ -8,7 +8,7 @@ export default function Header({
   onSave = () => {}, 
   onSettings = () => {}, 
   onStop = () => {},
-  onTutorial = () => {} // Add onTutorial prop here
+  onTutorial = () => {} 
 }) {
   const navigate = useNavigate();
 
@@ -33,14 +33,14 @@ export default function Header({
         <AnimatePresence>
           {buildMode && (
             <motion.div
-              style={{ display: "flex", gap: "15px", alignItems: "center" }}
+              style={{ display: "flex", gap: "12px", alignItems: "center" }}
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: 20 }}
               transition={{ duration: 0.4 }}
             >
               <button className="saveBtn headerBtn" id="save-button" onClick={onSave}>💾 Save</button>
-              <button className="tutorialBtn headerBtn" onClick={onTutorial}>🎓 Tutorial Mode</button> {/* Attached onTutorial here */}
+              <button className="tutorialBtn headerBtn" onClick={onTutorial}>🎓 Tutorial Mode</button>
               <button className="stopBtn headerBtn" id="stop-button" onClick={onStop}>⛔ Stop Building</button>
             </motion.div>
           )}

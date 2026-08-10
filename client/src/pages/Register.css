@@ -1,168 +1,213 @@
-@import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700&display=swap');
-
+/* Container & Background */
 .register-container {
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
   width: 100vw;
-  background: radial-gradient(circle at center, #070e1f 0%, #02040a 80%);
-  font-family: 'Rajdhani', sans-serif;
-  position: relative;
-  overflow-y: auto;
+  background-color: #f8fafc;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
   box-sizing: border-box;
-  padding: 20px 0;
+  padding: 30px 16px;
+  overflow-y: auto;
 }
 
-/* Ambient background glow behind the card */
-.register-container::before {
-  content: "";
-  position: absolute;
-  width: 350px;
-  height: 350px;
-  background: rgba(0, 71, 171, 0.15);
-  filter: blur(80px);
-  border-radius: 50%;
-  z-index: 1;
-}
-
-/* ==========================================================
-   REGISTER FORM CARD — HOLOGRAPHIC GLASS DECK
-========================================================== */
+/* Card Styling */
 .register-form {
-  background: rgba(10, 16, 32, 0.65);
-  backdrop-filter: blur(25px);
-  -webkit-backdrop-filter: blur(25px);
-  border: 1px solid rgba(0, 71, 171, 0.4);
-  padding: 30px 35px; /* Compacted vertical padding */
-  border-radius: 24px;
-  display: flex;
-  flex-direction: column;
-  width: 390px;
-  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.8),
-              0 0 30px rgba(0, 71, 171, 0.2),
-              inset 0 1px 0 rgba(255, 255, 255, 0.1);
-  color: white;
+  background: #ffffff;
+  padding: 32px;
+  border-radius: 16px;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+  width: 100%;
+  max-width: 420px;
+  border: 1px solid #e2e8f0;
+  box-sizing: border-box;
   position: relative;
-  z-index: 2;
 }
 
+/* Typography & Logo */
 .logo-title {
-  font-size: 28px; /* Slightly scaled down to fit nicely */
-  text-align: center;
-  margin-bottom: 1.2rem;
+  font-size: 28px;
   font-weight: 700;
-  letter-spacing: 2px;
-  text-transform: uppercase;
+  text-align: center;
+  margin-bottom: 4px;
+  color: #0f172a;
 }
 
-.mecha { color: #3b82f6; text-shadow: 0 0 15px rgba(59, 130, 246, 0.5); }
-.lab { color: #FFFFFF; }
+.logo-title .mecha {
+  color: #0047AB;
+}
+
+.logo-title .lab {
+  color: #0f172a;
+}
+
+.register-subtitle {
+  text-align: center;
+  color: #64748b;
+  font-size: 14px;
+  margin-bottom: 24px;
+}
+
+/* Input Groups */
+.input-group {
+  margin-bottom: 14px;
+}
 
 .register-form label {
-  font-size: 12px;
-  color: #94a3b8;
-  margin-bottom: 4px;
-  text-transform: uppercase;
+  display: block;
+  font-size: 13px;
   font-weight: 600;
-  letter-spacing: 1px;
+  color: #334155;
+  margin-bottom: 6px;
 }
 
-.input-container, .password-wrapper {
-  margin-bottom: 12px; /* Tighter spacing between inputs */
-  position: relative;
+.input-container input,
+.password-wrapper input {
   width: 100%;
-}
-
-.register-form input {
-  width: 100%;
-  padding: 11px 14px;
-  padding-right: 45px;
-  background: rgba(3, 7, 18, 0.6);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  color: white;
-  border-radius: 12px;
-  box-sizing: border-box;
-  font-size: 15px;
-  font-family: 'Rajdhani', sans-serif;
-  letter-spacing: 0.5px;
-  transition: all 0.3s ease;
-}
-
-.register-form input:focus {
-  border-color: #0047AB;
-  background: rgba(3, 7, 18, 0.85);
+  padding: 12px 14px;
+  background-color: #f8fafc;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  font-size: 14px;
+  color: #0f172a;
+  transition: all 0.2s ease;
   outline: none;
-  box-shadow: 0 0 20px rgba(0, 71, 171, 0.4);
+  box-sizing: border-box;
+}
+
+.input-container input:focus,
+.password-wrapper input:focus {
+  border-color: #0047AB;
+  background-color: #ffffff;
+  box-shadow: 0 0 0 3px rgba(0, 71, 171, 0.1);
+}
+
+/* Password Wrapper */
+.password-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
 }
 
 .toggle-password-btn {
   position: absolute;
-  right: 14px;
-  top: 50%;
-  transform: translateY(-50%);
-  background: none;
+  right: 12px;
+  background: transparent;
   border: none;
-  color: #64748b;
   cursor: pointer;
+  color: #64748b;
   display: flex;
   align-items: center;
-  justify-content: center;
   padding: 0;
-  z-index: 10;
-  transition: color 0.2s;
 }
 
-.toggle-password-btn:hover { color: #3b82f6; }
+.toggle-password-btn:hover {
+  color: #0f172a;
+}
 
+/* Submit Button */
 .submit-btn {
-  margin-top: 8px;
+  width: 100%;
   padding: 12px;
-  background: linear-gradient(135deg, #0047AB 0%, #1d4ed8 100%);
-  color: white;
-  font-weight: 700;
-  font-size: 15px;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
+  background-color: #0047AB;
+  color: #ffffff;
   border: none;
-  border-radius: 12px;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 600;
   cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 10px 25px rgba(0, 71, 171, 0.4);
+  transition: background-color 0.2s ease;
+  box-shadow: 0 4px 6px -1px rgba(0, 71, 171, 0.2);
+  margin-top: 8px;
 }
 
-.submit-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 15px 30px rgba(0, 71, 171, 0.6);
+.submit-btn:hover:not(:disabled) {
+  background-color: #003380;
 }
 
+.submit-btn:disabled {
+  background-color: #93c5fd;
+  cursor: not-allowed;
+}
+
+/* Redirect Text */
 .redirect-text {
   text-align: center;
-  margin-top: 15px;
   font-size: 14px;
   color: #64748b;
+  margin-top: 20px;
+  margin-bottom: 0;
 }
 
 .redirect-text a {
-  color: #3b82f6;
+  color: #0047AB;
   text-decoration: none;
-  font-weight: bold;
+  font-weight: 500;
 }
 
 .redirect-text a:hover {
   text-decoration: underline;
 }
 
-/* Circular Spinner Style */
+/* Verification State Elements */
+.verification-body {
+  margin: 30px 0;
+  text-align: center;
+}
+
+.success-icon {
+  margin: 0 auto 16px auto;
+  color: #16a34a;
+  animation: popIn 0.3s ease-in-out;
+}
+
+.success-title {
+  color: #16a34a;
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.success-subtitle {
+  color: #64748b;
+  font-size: 13px;
+  margin-top: 6px;
+}
+
+.verification-text {
+  color: #334155;
+  line-height: 1.5;
+  font-size: 14px;
+}
+
+.email-highlight {
+  color: #0f172a;
+}
+
+.verification-subtext {
+  color: #64748b;
+  font-size: 13px;
+  margin-top: 12px;
+  line-height: 1.4;
+}
+
+/* Loading Spinner */
 .spinner {
+  display: inline-block;
   width: 18px;
   height: 18px;
-  border: 3px solid rgba(255, 255, 255, 0.3);
+  border: 2px solid #ffffff;
   border-radius: 50%;
-  border-top-color: #ffffff;
+  border-top-color: transparent;
   animation: spin 0.8s linear infinite;
-  display: inline-block;
-  vertical-align: middle;
+}
+
+.large-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid #e2e8f0;
+  border-top-color: #0047AB;
+  margin: 0 auto 20px auto;
 }
 
 @keyframes spin {
@@ -171,7 +216,7 @@
   }
 }
 
-.submit-btn:disabled {
-  opacity: 0.7;
-  cursor: not-allowed;
+@keyframes popIn {
+  0% { transform: scale(0.8); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
 }

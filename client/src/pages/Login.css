@@ -1,176 +1,341 @@
-@import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700&display=swap');
+/* Container & Background */
 
 .login-container {
+
   display: flex;
+
   justify-content: center;
+
   align-items: center;
-  height: 100vh;
-  width: 100vw;
-  background: radial-gradient(circle at center, #070e1f 0%, #02040a 80%);
-  font-family: 'Rajdhani', sans-serif;
-  position: relative;
-  overflow: hidden;
-  box-sizing: border-box;
+
+  min-height: 100vh;
+
+  background-color: #f8fafc; /* Very soft slate-gray/off-white background */
+
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+
+  padding: 20px;
+
 }
 
-/* Ambient background glow behind the card */
-.login-container::before {
-  content: "";
-  position: absolute;
-  width: 350px;
-  height: 350px;
-  background: rgba(0, 71, 171, 0.15);
-  filter: blur(80px);
-  border-radius: 50%;
-  z-index: 1;
-}
 
-/* ==========================================================
-   LOGIN FORM CARD — HOLOGRAPHIC GLASS DECK
-========================================================== */
+
+/* Card Styling */
+
 .login-form {
-  background: rgba(10, 16, 32, 0.65);
-  backdrop-filter: blur(25px);
-  -webkit-backdrop-filter: blur(25px);
-  border: 1px solid rgba(0, 71, 171, 0.4);
-  padding: 45px 40px;
-  border-radius: 24px;
-  display: flex;
-  flex-direction: column;
-  width: 380px;
-  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.8),
-              0 0 30px rgba(0, 71, 171, 0.2),
-              inset 0 1px 0 rgba(255, 255, 255, 0.1);
-  color: white;
-  position: relative;
-  z-index: 2;
+
+  background: #ffffff;
+
+  padding: 40px 32px;
+
+  border-radius: 16px;
+
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+
+  width: 100%;
+
+  max-width: 400px;
+
+  border: 1px solid #e2e8f0;
+
 }
+
+
+
+/* Typography & Logo */
 
 .logo-title {
-  font-size: 32px;
-  text-align: center;
-  margin-bottom: 2rem;
+
+  font-size: 28px;
+
   font-weight: 700;
-  letter-spacing: 2px;
-  text-transform: uppercase;
+
+  text-align: center;
+
+  margin-bottom: 4px;
+
+  color: #0f172a;
+
 }
 
-.mecha { color: #3b82f6; text-shadow: 0 0 15px rgba(59, 130, 246, 0.5); }
-.lab { color: #FFFFFF; }
+
+
+.logo-title .mecha {
+
+  color: #0047AB; /* Keeps your branding blue */
+
+}
+
+
+
+.logo-title .lab {
+
+  color: #0f172a;
+
+}
+
+
+
+.login-subtitle {
+
+  text-align: center;
+
+  color: #64748b;
+
+  font-size: 14px;
+
+  margin-bottom: 24px;
+
+}
+
+
+
+/* Input Groups */
+
+.input-group {
+
+  margin-bottom: 16px;
+
+}
+
+
 
 .login-form label {
+
+  display: block;
+
   font-size: 13px;
-  color: #94a3b8;
-  margin-bottom: 8px;
-  text-transform: uppercase;
+
   font-weight: 600;
-  letter-spacing: 1px;
+
+  color: #334155;
+
+  margin-bottom: 6px;
+
 }
 
-.input-container, .password-wrapper {
-  margin-bottom: 20px;
-  position: relative;
+
+
+.input-container input,
+
+.password-wrapper input {
+
   width: 100%;
-}
 
-.login-form input {
-  width: 100%;
-  padding: 14px;
-  padding-right: 45px;
-  background: rgba(3, 7, 18, 0.6);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  color: white;
-  border-radius: 12px;
-  box-sizing: border-box;
-  font-size: 16px;
-  font-family: 'Rajdhani', sans-serif;
-  letter-spacing: 0.5px;
-  transition: all 0.3s ease;
-}
+  padding: 12px 14px;
 
-.login-form input:focus {
-  border-color: #0047AB;
-  background: rgba(3, 7, 18, 0.85);
+  background-color: #f8fafc;
+
+  border: 1px solid #cbd5e1;
+
+  border-radius: 8px;
+
+  font-size: 14px;
+
+  color: #0f172a;
+
+  transition: all 0.2s ease;
+
   outline: none;
-  box-shadow: 0 0 20px rgba(0, 71, 171, 0.4);
+
+  box-sizing: border-box;
+
 }
+
+
+
+.input-container input:focus,
+
+.password-wrapper input:focus {
+
+  border-color: #0047AB;
+
+  background-color: #ffffff;
+
+  box-shadow: 0 0 0 3px rgba(0, 71, 171, 0.1);
+
+}
+
+
+
+/* Password Wrapper */
+
+.password-wrapper {
+
+  position: relative;
+
+  display: flex;
+
+  align-items: center;
+
+}
+
+
 
 .toggle-password-btn {
+
   position: absolute;
-  right: 14px;
-  top: 50%;
-  transform: translateY(-50%);
-  background: none;
+
+  right: 12px;
+
+  background: transparent;
+
   border: none;
-  color: #64748b;
+
   cursor: pointer;
+
+  color: #64748b;
+
   display: flex;
+
   align-items: center;
-  justify-content: center;
+
   padding: 0;
-  z-index: 10;
-  transition: color 0.2s;
+
 }
 
-.toggle-password-btn:hover { color: #3b82f6; }
 
-.submit-btn {
-  margin-top: 10px;
-  padding: 14px;
-  background: linear-gradient(135deg, #0047AB 0%, #1d4ed8 100%);
-  color: white;
-  font-weight: 700;
-  font-size: 16px;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  border: none;
-  border-radius: 12px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 10px 25px rgba(0, 71, 171, 0.4);
+
+.toggle-password-btn:hover {
+
+  color: #0f172a;
+
 }
 
-.submit-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 15px 30px rgba(0, 71, 171, 0.6);
+
+
+/* Links */
+
+.forgot-password-container {
+
+  text-align: right;
+
+  margin: 6px 0 20px 0;
+
 }
 
-.redirect-text {
-  text-align: center;
-  margin-top: 20px;
-  font-size: 14px;
-  color: #64748b;
-}
+
+
+.forgot-password-container a,
 
 .redirect-text a {
-  color: #3b82f6;
+
+  font-size: 13px;
+
+  color: #0047AB;
+
   text-decoration: none;
-  font-weight: bold;
+
+  font-weight: 500;
+
 }
+
+
+
+.forgot-password-container a:hover,
 
 .redirect-text a:hover {
+
   text-decoration: underline;
+
 }
-/* Circular Spinner Style */
+
+
+
+/* Submit Button */
+
+.submit-btn {
+
+  width: 100%;
+
+  padding: 12px;
+
+  background-color: #0047AB;
+
+  color: #ffffff;
+
+  border: none;
+
+  border-radius: 8px;
+
+  font-size: 15px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: background-color 0.2s ease;
+
+  box-shadow: 0 4px 6px -1px rgba(0, 71, 171, 0.2);
+
+}
+
+
+
+.submit-btn:hover:not(:disabled) {
+
+  background-color: #003380;
+
+}
+
+
+
+.submit-btn:disabled {
+
+  background-color: #93c5fd;
+
+  cursor: not-allowed;
+
+}
+
+
+
+/* Redirect Text */
+
+.redirect-text {
+
+  text-align: center;
+
+  font-size: 14px;
+
+  color: #64748b;
+
+  margin-top: 20px;
+
+  margin-bottom: 0;
+
+}
+
+
+
+/* Loading Spinner */
+
 .spinner {
-  width: 18px;
-  height: 18px;
-  border: 3px solid rgba(255, 255, 255, 0.3);
-  border-radius: 50%;
-  border-top-color: #ffffff;
-  animation: spin 0.8s linear infinite;
+
   display: inline-block;
-  vertical-align: middle;
+
+  width: 18px;
+
+  height: 18px;
+
+  border: 2px solid #ffffff;
+
+  border-radius: 50%;
+
+  border-top-color: transparent;
+
+  animation: spin 0.8s linear infinite;
+
 }
+
+
 
 @keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
 
-/* Optional: style to make sure button content centers nicely when loading */
-.submit-btn:disabled {
-  opacity: 0.7;
-  cursor: not-allowed;
+  to {
+
+    transform: rotate(360deg);
+
+  }
+
 }

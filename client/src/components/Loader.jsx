@@ -6,41 +6,28 @@ export default function Loader({
 }) {
     return (
         <div className="loader-overlay">
-
-            <div className="loader-scanlines" />
-
             <div className="loader-container">
-
                 <div className="cyber-ring">
-
                     <div className="ring ring1"></div>
                     <div className="ring ring2"></div>
-
                     <div className="loader-core"></div>
-
                 </div>
 
                 <div className="loader-content">
-
                     <span className="loader-tag">
                          MECHALAB BOOT SEQUENCE 
                     </span>
 
                     <h2 className="loader-title">
-                                  <span className="mecha">MECHA</span>
-          <span className="lab">LAB</span> 
-
+                        <span className="mecha">MECHA</span>
+                        <span className="lab">LAB</span> 
                     </h2>
 
                     <p className="loader-status">
                         {status}
                     </p>
-
-
                 </div>
-
             </div>
-
         </div>
     );
 }

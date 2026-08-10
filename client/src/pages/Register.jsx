@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Eye, EyeOff, CheckCircle2 } from "lucide-react";
+import { Eye, EyeOff, CheckCircle2, AlertCircle } from "lucide-react";
 import { showNotification } from "../managers/NotificationManager";
 import "./Register.css";
 
@@ -15,16 +15,28 @@ function Register() {
   const [isLoading, setIsLoading] = useState(false);
   const [isRegistered, setIsRegistered] = useState(false);
   const [isVerifiedAndRedirecting, setIsVerifiedAndRedirecting] = useState(false);
+  const [verificationTimedOut, setVerificationTimedOut] = useState(false);
+  const [isResending, setIsResending] = useState(false);
 
   useEffect(() => {
     fetch("https://mechalab-backend.onrender.com/").catch(() => {});
   }, []);
 
-  // Live polling effect to detect when the user verifies their email in another tab/window
+  // Polling and 60-second Timeout logic
   useEffect(() => {
-    if (!isRegistered || !username || isVerifiedAndRedirecting) return;
+    if (!isRegistered || !username || isVerifiedAndRedirecting || verificationTimedOut) return;
+
+    const startTime = Date.now();
+    const timeoutLimit = 60000; // 60 seconds
 
     const interval = setInterval(async () => {
+      // Check if 1 minute has elapsed
+      if (Date.now() - startTime > timeoutLimit) {
+        clearInterval(interval);
+        setVerificationTimedOut(true);
+        return;
+      }
+
       try {
         const response = await fetch(`https://mechalab-backend.onrender.com/api/auth/check-status?username=${encodeURIComponent(username)}`);
         const data = await response.json();
@@ -43,7 +55,30 @@ function Register() {
     }, 3000);
 
     return () => clearInterval(interval);
-  }, [isRegistered, username, isVerifiedAndRedirecting, navigate]);
+  }, [isRegistered, username, isVerifiedAndRedirecting, verificationTimedOut, navigate]);
+
+  async function handleResendEmail() {
+    setIsResending(true);
+    try {
+      const response = await fetch("https://mechalab-backend.onrender.com/api/auth/resend-verification", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+
+      const data = await response.json();
+      if (response.ok) {
+        showNotification(data.message || "VERIFICATION EMAIL RESENT");
+        setVerificationTimedOut(false); // Reset timer state if they want to try polling again
+      } else {
+        showNotification(data.message || "FAILED TO RESEND EMAIL");
+      }
+    } catch (error) {
+      showNotification("UNABLE TO CONNECT TO THE SERVER.");
+    } finally {
+      setIsResending(false);
+    }
+  }
 
   async function handleRegister(e) {
     e.preventDefault();
@@ -80,6 +115,7 @@ function Register() {
       if (response.ok) {
         showNotification(data.message || "REGISTRATION SUCCESSFUL");
         setIsRegistered(true);
+        setVerificationTimedOut(false);
       } else {
         showNotification(data.message || "REGISTRATION FAILED");
       }
@@ -93,30 +129,63 @@ function Register() {
   if (isRegistered) {
     return (
       <div className="register-container">
-        <div className="register-form" style={{ textAlign: "center" }}>
+        <div className="register-form verification-card">
           <h1 className="logo-title">
             <span className="mecha">Mecha</span>
-            <span className="lab">Lab</span> Verification
+            <span className="lab">Lab</span>
           </h1>
+          <p className="register-subtitle">Account Verification</p>
 
-          <div style={{ margin: "40px 0" }}>
+          <div className="verification-body">
             {isVerifiedAndRedirecting ? (
               <div>
-                <CheckCircle2 size={56} color="#00ff66" style={{ margin: "0 auto 20px auto", animation: "popIn 0.3s ease-in-out" }} />
-                <p style={{ color: "#00ff66", fontWeight: "bold", fontSize: "16px" }}>
+                <CheckCircle2 size={56} className="success-icon" />
+                <p className="success-title">
                   Email Verified Successfully!
                 </p>
-                <p style={{ color: "#ccc", fontSize: "13px", marginTop: "8px" }}>
+                <p className="success-subtitle">
                   Redirecting you to login...
                 </p>
               </div>
+            ) : verificationTimedOut ? (
+              <div>
+                <AlertCircle size={56} className="warning-icon" style={{ color: "#f59e0b", margin: "0 auto 16px" }} />
+                <p className="success-title" style={{ fontSize: "1.2rem", marginBottom: "8px" }}>
+                  Verification Timed Out
+                </p>
+                <p className="verification-text" style={{ marginBottom: "20px" }}>
+                  We haven't detected a verification confirmation yet. Would you like us to send another link or go back?
+                </p>
+                
+                <button 
+                  type="button" 
+                  className="submit-btn" 
+                  onClick={handleResendEmail} 
+                  disabled={isResending}
+                  style={{ marginBottom: "12px" }}
+                >
+                  {isResending ? <span className="spinner"></span> : "Resend Verification Link"}
+                </button>
+
+                <button 
+                  type="button" 
+                  className="submit-btn" 
+                  style={{ backgroundColor: "#64748b" }}
+                  onClick={() => {
+                    setIsRegistered(false);
+                    setVerificationTimedOut(false);
+                  }}
+                >
+                  Back to Registration
+                </button>
+              </div>
             ) : (
               <div>
-                <div className="spinner" style={{ width: "45px", height: "45px", borderWidth: "4px", margin: "0 auto 20px auto" }}></div>
-                <p style={{ color: "#ccc", lineHeight: "1.6" }}>
-                  We sent a verification link to <strong style={{ color: "#fff" }}>{email}</strong>.
+                <div className="spinner large-spinner"></div>
+                <p className="verification-text">
+                  We sent a verification link to <strong className="email-highlight">{email}</strong>.
                 </p>
-                <p style={{ color: "#888", fontSize: "13px", marginTop: "12px" }}>
+                <p className="verification-subtext">
                   Waiting for verification... This screen will automatically log you through once confirmed.
                 </p>
               </div>
@@ -132,47 +201,60 @@ function Register() {
       <form className="register-form" onSubmit={handleRegister}>
         <h1 className="logo-title">
           <span className="mecha">Mecha</span>
-          <span className="lab">Lab</span> Register
+          <span className="lab">Lab</span>
         </h1>
+        <p className="register-subtitle">Create your new account</p>
 
-        <label>Full Name</label>
-        <div className="input-container">
-          <input type="text" value={fullName} onChange={(e) => setFullName(e.target.value)} autoComplete="name" required />
+        <div className="input-group">
+          <label>Full Name</label>
+          <div className="input-container">
+            <input type="text" value={fullName} onChange={(e) => setFullName(e.target.value)} placeholder="Enter your full name" autoComplete="name" required />
+          </div>
         </div>
 
-        <label>Username</label>
-        <div className="input-container">
-          <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} autoComplete="username" required />
+        <div className="input-group">
+          <label>Username</label>
+          <div className="input-container">
+            <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} placeholder="Choose a username" autoComplete="username" required />
+          </div>
         </div>
 
-        <label>Email Address</label>
-        <div className="input-container">
-          <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} autoComplete="email" required />
+        <div className="input-group">
+          <label>Email Address</label>
+          <div className="input-container">
+            <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Enter your email" autoComplete="email" required />
+          </div>
         </div>
 
-        <label>Password</label>
-        <div className="password-wrapper">
-          <input 
-            type={showPassword ? "text" : "password"} 
-            value={password} 
-            onChange={(e) => setPassword(e.target.value)} 
-            autoComplete="new-password"
-            required 
-          />
-          <button type="button" className="toggle-password-btn" onClick={() => setShowPassword(!showPassword)}>
-            {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-          </button>
+        <div className="input-group">
+          <label>Password</label>
+          <div className="password-wrapper">
+            <input 
+              type={showPassword ? "text" : "password"} 
+              value={password} 
+              onChange={(e) => setPassword(e.target.value)} 
+              placeholder="Create a password"
+              autoComplete="new-password"
+              required 
+            />
+            <button type="button" className="toggle-password-btn" onClick={() => setShowPassword(!showPassword)} aria-label="Toggle password visibility">
+              {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+            </button>
+          </div>
         </div>
 
-        <label>Confirm Password</label>
-        <div className="input-container">
-          <input 
-            type={showPassword ? "text" : "password"} 
-            value={confirmPassword} 
-            onChange={(e) => setConfirmPassword(e.target.value)} 
-            autoComplete="new-password"
-            required 
-          />
+        <div className="input-group">
+          <label>Confirm Password</label>
+          <div className="input-container">
+            <input 
+              type={showPassword ? "text" : "password"} 
+              value={confirmPassword} 
+              onChange={(e) => setConfirmPassword(e.target.value)} 
+              placeholder="Confirm your password"
+              autoComplete="new-password"
+              required 
+            />
+          </div>
         </div>
 
         <button type="submit" className="submit-btn" disabled={isLoading}>

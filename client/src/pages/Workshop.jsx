@@ -19,7 +19,6 @@ import PartTray from "../components/PartTray";
 import Workbench from "../components/Workbench";
 import SaveModal from "../components/SaveModal";
 import ConfigurationGallery from "../components/ConfigurationGallery";
-import SettingsMenu from "../components/SettingsMenu";
 import WorkshopGreeting from "../components/WorkshopGreeting";
 import TutorialManager from "../components/TutorialManager";
 import AssemblyTutorialWelcome from "../components/AssemblyTutorialWelcome";
@@ -36,23 +35,19 @@ function Workshop() {
     const [isMusicPlaying, setIsMusicPlaying] = useState(true);
     const [isSaveModalOpen, setIsSaveModalOpen] = useState(false);
     const [isGalleryOpen, setIsGalleryOpen] = useState(false);
-    const [isSettingsOpen, setIsSettingsOpen] = useState(false);
     const [isTutorialOpen, setIsTutorialOpen] = useState(false);
     const [isSpotlightActive, setIsSpotlightActive] = useState(false);
     const [isAssemblyTutorialActive, setIsAssemblyTutorialActive] = useState(false);
     const [showWelcomeCard, setShowWelcomeCard] = useState(false);
     const [savedConfigs, setSavedConfigs] = useState([]);
 
-    // Tutorial Flow State (0: Welcome, 1: Tray, 2: Chassis, 3: Workbench Drag, 4: Complete)
     const [tutorialStep, setTutorialStep] = useState(0);
 
     const audioRef = useRef(null);
 
-    // Track 3D model loading progress from Drei
     const { progress } = useProgress();
     const [isMinLoadingElapsed, setIsMinLoadingElapsed] = useState(false);
 
-    // Artificial minimum timer so the user actually gets to see and experience the loader smoothly
     useEffect(() => {
         const timer = setTimeout(() => {
             setIsMinLoadingElapsed(true);
@@ -60,7 +55,6 @@ function Workshop() {
         return () => clearTimeout(timer);
     }, []);
 
-    // Fully loaded only when 3D assets hit 100% AND the minimum display timer finishes
     const isFullyLoaded = progress === 100 && isMinLoadingElapsed;
 
     useEffect(() => {
@@ -83,7 +77,6 @@ function Workshop() {
         };
     }, [buildMode, isMusicPlaying]);
 
-    // Keep highlight active from Step 2 onwards until the part is installed
     useEffect(() => {
         const checkHighlight = () => {
             const isInstalled = InstallManager.getCount("brake-fl") > 0;
@@ -99,7 +92,6 @@ function Workshop() {
         return () => unsubscribe();
     }, [isAssemblyTutorialActive, tutorialStep]);
 
-    // Listen for part installations to automatically progress from Step 3 -> Step 4
     useEffect(() => {
         const unsubscribe = InstallManager.subscribe((installedParts) => {
             if (isAssemblyTutorialActive && tutorialStep === 3) {
@@ -268,7 +260,6 @@ function Workshop() {
             )}
             <WorkshopGreeting/>
             
-            {/* Assembly Tutorial Welcome Overlay Card */}
             <AnimatePresence>
                 {showWelcomeCard && (
                     <AssemblyTutorialWelcome
@@ -278,7 +269,6 @@ function Workshop() {
                 )}
             </AnimatePresence>
 
-            {/* Step-by-Step Interactive Tutorial Overlay */}
             {isAssemblyTutorialActive && !showWelcomeCard && (
                 <TutorialStepOverlay 
                     stepData={getTutorialStepData()} 
@@ -291,7 +281,6 @@ function Workshop() {
                     !isFullyLoaded ? "workshop-hidden" : ""
                 } ${
                     isSaveModalOpen ||
-                    isSettingsOpen ||
                     isGalleryOpen ||
                     (isTutorialOpen && !isSpotlightActive) ||
                     showWelcomeCard
@@ -299,7 +288,6 @@ function Workshop() {
                         : ""
                 }`}
             >
-                {/* Fixed Header (No entrance animation, stays locked in position) */}
                 {!isAssemblyTutorialActive && (
                     <Header
                         buildMode={buildMode}
@@ -318,7 +306,6 @@ function Workshop() {
 
                 {buildMode && !isAssemblyTutorialActive && <UninstallPanel />}
 
-                {/* Static Background Responsive Logo (Hidden in Build Mode, full color, no animation) */}
                 {!buildMode && (
                     <div 
                         style={{
@@ -341,7 +328,7 @@ function Workshop() {
                                 height: "auto",
                                 objectFit: "contain",
                                 userSelect: "none",
-                                opacity: 0.9,
+                                opacity: 0.15,
                                 filter: "saturate(1) contrast(1)"
                             }}
                         />
@@ -361,7 +348,6 @@ function Workshop() {
                     />
                 )}
 
-                {/* Exit Tutorial Button */}
                 {isAssemblyTutorialActive && !showWelcomeCard && (
                     <div style={{ position: "absolute", top: "20px", right: "30px", zIndex: 3000 }}>
                         <motion.button 
@@ -369,14 +355,13 @@ function Workshop() {
                             whileTap={{ scale: 0.95 }}
                             className="tutorial-btn-secondary" 
                             onClick={exitAssemblyTutorial}
-                            style={{ backgroundColor: "#0b0b0b", border: "1px solid #0047AB", color: "#fff", padding: "10px 20px", borderRadius: "6px", cursor: "pointer", fontFamily: "'Rajdhani', sans-serif", fontWeight: "600" }}
+                            style={{ backgroundColor: "#ffffff", border: "1px solid #cbd5e1", color: "#334155", padding: "10px 20px", borderRadius: "8px", cursor: "pointer", fontFamily: "'Rajdhani', sans-serif", fontWeight: "600", boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.05)" }}
                         >
                             Exit Tutorial
                         </motion.button>
                     </div>
                 )}
 
-                {/* Cinematic Button/Menu Transitions (Home screen buttons scale, blur and fade out intentionally) */}
                 <AnimatePresence mode="wait">
                     {!buildMode && (
                         <motion.div
@@ -395,7 +380,7 @@ function Workshop() {
                                     animate={{ scale: 1, opacity: 1, y: 0 }}
                                     exit={{ scale: 1.1, opacity: 0, y: -20 }}
                                     transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-                                    whileHover={{ scale: 1.06, boxShadow: "0 0 25px rgba(0, 71, 171, 0.8)" }}
+                                    whileHover={{ scale: 1.06, boxShadow: "0 10px 25px -5px rgba(0, 71, 171, 0.3)" }}
                                     whileTap={{ scale: 0.95 }}
                                 >
                                     🚗 Start Building
@@ -439,7 +424,6 @@ function Workshop() {
                 </AnimatePresence>
             </div>
 
-            {/* Part Tray smooth upward transition */}
             <AnimatePresence>
                 {buildMode && (
                     <motion.div
@@ -483,10 +467,6 @@ function Workshop() {
                 onClose={() => setIsSaveModalOpen(false)}
             />
 
-            <SettingsMenu
-                isOpen={isSettingsOpen}
-                onClose={() => setIsSettingsOpen(false)}
-            />
 
             <ConfigurationGallery
                 isOpen={isGalleryOpen}

@@ -46,44 +46,37 @@ function ForgotPassword() {
       }
     } catch (error) {
       console.error("Forgot password error:", error);
-
-      showNotification(
-        "UNABLE TO CONNECT TO THE SERVER."
-      );
+      showNotification("UNABLE TO CONNECT TO THE SERVER.");
     } finally {
       setIsLoading(false);
     }
   }
 
   return (
-    <div className="login-form">
-      <h1>Mecha</h1>
-      <h2>Lab Reset</h2>
+    <div className="login-container">
+      <form className="login-form" onSubmit={handleForgotPassword}>
+        <h1 className="logo-title">
+          <span className="mecha">Mecha</span>
+          <span className="lab">Lab</span>
+        </h1>
+        <p className="login-subtitle">Reset your password</p>
 
-      <form onSubmit={handleForgotPassword}>
-        <p
-          style={{
-            color: "#aaa",
-            fontSize: "14px",
-            marginBottom: "15px",
-            textAlign: "center",
-            lineHeight: "1.5",
-          }}
-        >
-          Enter your account email and we'll send you a
-          link to reset your password.
+        <p className="forgot-instruction">
+          Enter your account email and we'll send you a link to reset your password.
         </p>
 
-        <label>Email Address</label>
-
-        <div className="input-container">
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            autoComplete="email"
-            required
-          />
+        <div className="input-group">
+          <label>Email Address</label>
+          <div className="input-container">
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="Enter your email"
+              autoComplete="email"
+              required
+            />
+          </div>
         </div>
 
         <button
