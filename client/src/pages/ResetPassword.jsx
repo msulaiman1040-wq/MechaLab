@@ -18,35 +18,27 @@ function ResetPassword() {
   async function handleResetPassword(e) {
     e.preventDefault();
 
-    // Check reset token
     if (!token) {
       showNotification("MISSING OR INVALID RESET TOKEN.");
       return;
     }
 
-    // Check password confirmation
     if (newPassword !== confirmPassword) {
       showNotification("PASSWORDS DO NOT MATCH.");
       return;
     }
 
-    // Minimum password length
     if (newPassword.length < 6) {
-      showNotification(
-        "PASSWORD MUST BE AT LEAST 6 CHARACTERS LONG."
-      );
+      showNotification("PASSWORD MUST BE AT LEAST 6 CHARACTERS LONG.");
       return;
     }
 
-    // Password requirements
     const hasLetter = /[a-zA-Z]/.test(newPassword);
     const hasNumber = /[0-9]/.test(newPassword);
     const hasSymbol = /[^a-zA-Z0-9]/.test(newPassword);
 
     if (!hasLetter || !hasNumber || !hasSymbol) {
-      showNotification(
-        "PASSWORD MUST CONTAIN LETTERS, NUMBERS, AND SYMBOLS."
-      );
+      showNotification("PASSWORD MUST CONTAIN LETTERS, NUMBERS, AND SYMBOLS.");
       return;
     }
 
@@ -70,90 +62,72 @@ function ResetPassword() {
       const data = await response.json();
 
       if (response.ok) {
-        showNotification(
-          data.message || "PASSWORD RESET SUCCESSFUL"
-        );
-
+        showNotification(data.message || "PASSWORD RESET SUCCESSFUL");
         setTimeout(() => {
           navigate("/login");
         }, 3000);
       } else {
-        showNotification(
-          data.message || "PASSWORD RESET FAILED"
-        );
+        showNotification(data.message || "PASSWORD RESET FAILED");
       }
     } catch (error) {
       console.error("Reset password error:", error);
-
-      showNotification(
-        "UNABLE TO CONNECT TO THE SERVER."
-      );
+      showNotification("UNABLE TO CONNECT TO THE SERVER.");
     } finally {
       setIsLoading(false);
     }
   }
 
   return (
-    <div className="login-form">
-      <h1>Mecha</h1>
-      <h2>Lab New Password</h2>
+    <div className="login-container">
+      <form className="login-form" onSubmit={handleResetPassword}>
+        <h1 className="logo-title">
+          <span className="mecha">Mecha</span>
+          <span className="lab">Lab</span>
+        </h1>
+        <p className="login-subtitle">Set new password</p>
 
-      <form onSubmit={handleResetPassword}>
-        <label>New Password</label>
-
-        <div className="password-wrapper">
-          <input
-            type={showPassword ? "text" : "password"}
-            value={newPassword}
-            onChange={(e) => setNewPassword(e.target.value)}
-            autoComplete="new-password"
-            required
-          />
-
-          <button
-            type="button"
-            className="toggle-password-btn"
-            onClick={() =>
-              setShowPassword(!showPassword)
-            }
-          >
-            {showPassword ? (
-              <EyeOff size={18} />
-            ) : (
-              <Eye size={18} />
-            )}
-          </button>
+        <div className="input-group">
+          <label>New Password</label>
+          <div className="password-wrapper">
+            <input
+              type={showPassword ? "text" : "password"}
+              value={newPassword}
+              onChange={(e) => setNewPassword(e.target.value)}
+              placeholder="Enter new password"
+              autoComplete="new-password"
+              required
+            />
+            <button
+              type="button"
+              className="toggle-password-btn"
+              onClick={() => setShowPassword(!showPassword)}
+              aria-label="Toggle password visibility"
+            >
+              {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+            </button>
+          </div>
         </div>
 
-        <label>Confirm New Password</label>
-
-        <div className="input-container">
-          <input
-            type={showPassword ? "text" : "password"}
-            value={confirmPassword}
-            onChange={(e) =>
-              setConfirmPassword(e.target.value)
-            }
-            autoComplete="new-password"
-            required
-          />
+        <div className="input-group">
+          <label>Confirm New Password</label>
+          <div className="input-container">
+            <input
+              type={showPassword ? "text" : "password"}
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              placeholder="Confirm new password"
+              autoComplete="new-password"
+              required
+            />
+          </div>
         </div>
 
-        <button
-          type="submit"
-          className="submit-btn"
-          disabled={isLoading}
-        >
-          {isLoading ? (
-            <span className="spinner"></span>
-          ) : (
-            "Update Password"
-          )}
+        <button type="submit" className="submit-btn" disabled={isLoading}>
+          {isLoading ? <span className="spinner"></span> : "Update Password"}
         </button>
 
         <p className="redirect-text">
-          Remembered your password?{" "}
-          <Link to="/login">Login</Link>
+          Remembered your password? <Link to="/login">Login</Link>
         </p>
       </form>
     </div>

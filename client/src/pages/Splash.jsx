@@ -17,7 +17,7 @@ function Splash() {
         transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
       >
         <h1 className="splash-title">
-          <span className="mecha">MECHA</span><span className="lab">LAB</span>
+          <span className="mecha">MECHA</span><span className="laab">LAB</span>
         </h1>      
        
         <h2 className="splash-subtitle">
