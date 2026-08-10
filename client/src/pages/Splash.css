@@ -80,8 +80,12 @@
   margin: 0;
 }
 
-.highlight-text {
-  color: #0f172a;
+.highlight-text1 {
+  color: #0047ab;
+  font-weight: 600;
+}
+.highlight-text2 {
+  color: #000000;
   font-weight: 600;
 }
 

@@ -27,7 +27,7 @@ function Splash() {
 
         <div className="splash-description-box">
           <p>
-            Welcome to <span className="highlight-text">MECHALAB</span>, an advanced web-based environment engineered for interactive vehicle assembly, real-time simulation, and immersive technical learning. Explore custom part configurations, inspect component dynamics, and master mechanical engineering concepts.
+            Welcome to <span className="highlight-text1">MECHA</span> <span className="highlight-text22">LAB</span>, an advanced web-based environment engineered for interactive vehicle assembly, real-time simulation, and immersive technical learning. Explore custom part configurations, inspect component dynamics, and master mechanical engineering concepts.
           </p>
         </div>
 
