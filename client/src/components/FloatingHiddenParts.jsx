@@ -220,6 +220,7 @@ export default function FloatingHiddenParts({ buildMode, tutorialMode = false })
                 alignItems: "flex-start",
                 gap: "12px",
                 userSelect: "none",
+                touchAction: "none", // Prevents background scrolling/dragging on mobile devices
                 fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
             }}
         >
