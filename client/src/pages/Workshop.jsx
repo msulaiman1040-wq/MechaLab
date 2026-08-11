@@ -476,7 +476,7 @@ function Workshop() {
                 onLoad={handleLoad}
             />
 
-            <Footer />
+            {!buildMode && <Footer />}
         </>
     );
 }
