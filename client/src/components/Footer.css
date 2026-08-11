@@ -1,0 +1,43 @@
+@import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700&display=swap');
+
+.mechalab-footer {
+  width: 100%;
+  background: #ffffff;
+  border-top: 1px solid #e2e8f0;
+  padding: 16px 0;
+  font-family: 'Rajdhani', sans-serif;
+  color: #1e293b;
+  box-sizing: border-box;
+  margin-top: auto;
+  z-index: 50;
+  position: relative;
+  box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.03);
+}
+
+.footer-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.mechalab-footer p {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  color: #475569;
+}
+
+.footer-mecha {
+  color: #0047AB;
+  font-weight: 700;
+}
+
+.footer-lab {
+  color: #000000;
+  font-weight: 700;
+}

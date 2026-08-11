@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { partsData } from "../data/partsData";
 import { useMechapediaTheme } from "../Context/MechapediaThemeContext";
+import Footer from "../components/Footer";
 import "./Mechapedia.css";
 
 export default function MechapediaHome() {
@@ -9,7 +10,7 @@ export default function MechapediaHome() {
     const { isDarkMode, toggleTheme } = useMechapediaTheme();
 
     return (
-        <div className={`mechapedia ${isDarkMode ? "dark-mode" : "light-mode"}`}>
+        <div className={`mechapedia ${isDarkMode ? "dark-mode" : "light-mode"}`} style={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}>
             
             {/* Theme Toggle Button */}
             <div className="themeToggleContainer">
@@ -51,7 +52,7 @@ export default function MechapediaHome() {
                 Select any component below to begin your learning journey.
             </motion.p>
 
-            <div className="partsGrid">
+            <div className="partsGrid" style={{ flex: 1 }}>
                 {partsData.map((part) => (
                     <motion.div
                         key={part.id}
@@ -82,6 +83,8 @@ export default function MechapediaHome() {
             >
                 ← Back to Workshop
             </motion.button>
+
+            <Footer />
         </div>
     );
 }

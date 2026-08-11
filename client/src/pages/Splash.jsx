@@ -1,12 +1,13 @@
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
+import Footer from "../components/Footer";
 import "./Splash.css";
 
 function Splash() {
   const navigate = useNavigate();
 
   return (
-    <div className="splash-container">
+    <div className="splash-container" style={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}>
       {/* Background Engineering Grid Accent */}
       <div className="splash-grid-overlay" />
 
@@ -15,6 +16,7 @@ function Splash() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+        style={{ flex: 1 }}
       >
         <h1 className="splash-title">
           <span className="mecha">MECHA</span><span className="laab">LAB</span>
@@ -54,7 +56,7 @@ function Splash() {
 
       </motion.div>
 
-      <p className="developer-tag">Developed by Sulaiman Muhammad</p>
+      <Footer />
     </div>
   );
 }

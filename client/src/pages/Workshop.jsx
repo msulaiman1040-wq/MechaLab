@@ -23,6 +23,7 @@ import WorkshopGreeting from "../components/WorkshopGreeting";
 import TutorialManager from "../components/TutorialManager";
 import AssemblyTutorialWelcome from "../components/AssemblyTutorialWelcome";
 import TutorialStepOverlay from "../components/TutorialStepOverlay";
+import Footer from "../components/Footer";
 import logoImg from "../assets/images/mechalab-logo.png";
 import "./Workshop.css";
 
@@ -467,7 +468,6 @@ function Workshop() {
                 onClose={() => setIsSaveModalOpen(false)}
             />
 
-
             <ConfigurationGallery
                 isOpen={isGalleryOpen}
                 onClose={() => setIsGalleryOpen(false)}
@@ -475,6 +475,8 @@ function Workshop() {
                 onDelete={handleDelete}
                 onLoad={handleLoad}
             />
+
+            <Footer />
         </>
     );
 }

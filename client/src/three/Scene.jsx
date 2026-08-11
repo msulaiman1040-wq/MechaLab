@@ -57,7 +57,8 @@ export default function Scene({ buildMode, onSceneReady }) {
                 id="vehicle-canvas"
                 style={{
                     width: "100%",
-                    height: "100%"
+                    height: "100%",
+                    touchAction: "pan-x pan-y" // Allows smoother mobile gesture pass-through
                 }}
             >
                 <Canvas
@@ -71,8 +72,7 @@ export default function Scene({ buildMode, onSceneReady }) {
                     }}
                     style={{
                         position: "relative",
-                        zIndex: 1,
-                        touchAction: "none"
+                        zIndex: 1
                     }}
                 >
                     <SceneInitializer />
@@ -104,7 +104,7 @@ export default function Scene({ buildMode, onSceneReady }) {
                         screenSpacePanning={false}
                         rotateSpeed={2.5}
                         enableZoom={true}
-                        minDistance={2}               // Closest they can zoom in
+                        minDistance={2}              // Closest they can zoom in
                         maxDistance={initialDistance} // Prevents zooming out past the starting point
                         autoRotate={!isInteracted}
                         autoRotateSpeed={1.0}

@@ -6,10 +6,10 @@
     margin: 0 auto;
     max-width: 450px;
     z-index: 9999;
-    background: rgba(0, 0, 0, 0.85);
+    background: #0047AB;
     backdrop-filter: blur(10px);
-    border: 1px solid #0047AB;
-    box-shadow: 0 0 25px rgba(0, 71, 171, 0.4), inset 0 0 10px rgba(0, 71, 171, 0.2);
+    border: 1px solid #ffffff;
+    box-shadow: 0 10px 25px rgba(0, 71, 171, 0.4), inset 0 0 10px rgba(255, 255, 255, 0.2);
     padding: 14px 20px;
     border-radius: 8px;
     display: flex;
@@ -19,20 +19,22 @@
     pointer-events: none;
     box-sizing: border-box;
 }
+
 .greeting-status-dot {
     width: 10px;
     height: 10px;
     min-width: 10px;
-    background-color: #0047AB;
+    background-color: #ffffff;
     border-radius: 50%;
-    box-shadow: 0 0 10px #0047AB;
+    box-shadow: 0 0 10px #ffffff;
     animation: pulse 1.5s infinite;
 }
 
 .greeting-label {
     font-size: clamp(0.75rem, 2vw, 0.9rem);
-    color: #ff0000;
+    color: #ffffff;
     letter-spacing: 2px;
+    font-weight: 700;
     margin-bottom: 2px;
 }
 
@@ -43,9 +45,16 @@
     font-weight: 600;
     word-break: break-word;
 }
-.mecha { color: #0047AB; }
-.lab { color: #FFFFFF; }
 
+.mechaa { 
+    color: #ffffff; 
+    font-weight: 700;
+}
+
+.lab { 
+    color: #000000; 
+    font-weight: 700;
+}
 
 @keyframes pulse {
     0% { transform: scale(1); opacity: 1; }

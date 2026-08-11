@@ -32,11 +32,9 @@ export default function WorkshopGreeting() {
                         </div>
                         <div className="greeting-message">
                             Welcome to 
-                                                              <span className="mecha">MECHA</span>
-          <span className="lab">LAB</span> 
-
-                            Bay. 
-                            Systems online.
+                            <span className="mechaa">MECHA</span>
+                            <span className="lab">LAB</span> 
+                            Bay. Systems online.
                         </div>
                     </div>
                 </motion.div>
