@@ -20,7 +20,6 @@ function SceneInitializer() {
     return null;
 }
 
-// Helper component to forcibly lock OrbitControls target to [0,0,0] every frame
 function ControlsLock({ controlsRef }) {
     useFrame(() => {
         if (controlsRef.current) {
@@ -35,7 +34,6 @@ export default function Scene({ buildMode, onSceneReady }) {
     const controls = useRef();
     const [isInteracted, setIsInteracted] = useState(false);
 
-    // Define initial camera position and calculate its starting distance from [0, 0, 0]
     const initialCameraPosition = useMemo(() => new THREE.Vector3(8, 5, 8), []);
     const initialDistance = useMemo(() => initialCameraPosition.length(), [initialCameraPosition]);
 
@@ -58,7 +56,7 @@ export default function Scene({ buildMode, onSceneReady }) {
                 style={{
                     width: "100%",
                     height: "100%",
-                    touchAction: "pan-x pan-y" // Allows smoother mobile gesture pass-through
+                    touchAction: "none" // Ensures mobile pinch gestures target the canvas instead of scrolling the window
                 }}
             >
                 <Canvas
@@ -104,8 +102,9 @@ export default function Scene({ buildMode, onSceneReady }) {
                         screenSpacePanning={false}
                         rotateSpeed={2.5}
                         enableZoom={true}
-                        minDistance={2}              // Closest they can zoom in
-                        maxDistance={initialDistance} // Prevents zooming out past the starting point
+                        zoomSpeed={1.2}        // Enhances mobile pinch sensitivity
+                        minDistance={2}
+                        maxDistance={initialDistance}
                         autoRotate={!isInteracted}
                         autoRotateSpeed={1.0}
                         touches={{
